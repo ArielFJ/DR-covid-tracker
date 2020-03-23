@@ -24,7 +24,7 @@ export class CovidMap extends Component {
     render() {
         return (
             <Fragment>
-                <Map toggleAdding={this.toggleAdding} />
+                <Map toggleAdding={this.toggleAdding} adding={this.state.adding}/>
                 <CovidStats />
                 {this.state.adding && <FormCovidCase toggleAdding={this.toggleAdding} />}
             </Fragment>

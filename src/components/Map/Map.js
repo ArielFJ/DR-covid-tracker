@@ -31,7 +31,7 @@ export class Map extends Component {
     styleFunc(){
         return{
             height:'30rem',
-            width: '60%',
+            width: '100%',
             border: '2px solid black',
             marginLeft: 'auto',
             marginRight: 'auto',
@@ -47,7 +47,9 @@ export class Map extends Component {
         //     .setContent("You clicked the map at " + e.latlng.toString())
         //     .openOn(this.map);
         // console.log(this.state.adding)
-        this.props.toggleAdding()
+        if(!this.props.adding){    
+            this.props.toggleAdding()
+        }
         // let marker = L.marker(e.latlng).addTo(this.map);
         // let province = prompt("Write the province name");
         // let number = prompt("Write the number of cases");
