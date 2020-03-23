@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import L from 'leaflet';
-import FormCovidCase from '../FormCovidCase';
 
 export class Map extends Component {
 
@@ -11,6 +10,9 @@ export class Map extends Component {
 
         this.map = null;
         this.popup = new L.popup();
+        this.state= {
+            coords: {}
+        }
     }
 
 
@@ -26,6 +28,7 @@ export class Map extends Component {
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
+        
     }
 
     styleFunc(){
@@ -39,6 +42,14 @@ export class Map extends Component {
         }
     }
 
+    componentDidUpdate(){
+        if(this.props.canAdd){
+            console.log('props',this.props)
+            let marker = L.marker(this.state.coords).addTo(this.map);
+            marker.bindPopup(`Cases: ${this.props.cases} <a href="www.google.com" target="blank">Edit</a>`).openPopup();
+            this.props.toggleCanAdd();
+        }
+    }
     
 
     onMapClick(e) {
@@ -47,8 +58,11 @@ export class Map extends Component {
         //     .setContent("You clicked the map at " + e.latlng.toString())
         //     .openOn(this.map);
         // console.log(this.state.adding)
-        if(!this.props.adding){    
-            this.props.toggleAdding()
+        if(!this.props.adding){   
+            this.setState({
+                coords: e.latlng
+            })
+            this.props.toggleAdding();
         }
         // let marker = L.marker(e.latlng).addTo(this.map);
         // let province = prompt("Write the province name");
@@ -57,8 +71,15 @@ export class Map extends Component {
     }
 
 
-
     render() {
+
+
+        // if(this.props.canAdd){
+        //     let Case = this.props.newCase;
+        //     let marker = L.marker([Case.lat, Case.lng]).addTo(this.map);
+        //     marker.bindPopup(`Cases: ${Case.cases}`).openPopup();
+        // }
+
         return (
             <div id="map" style={this.styleFunc()}>
                 

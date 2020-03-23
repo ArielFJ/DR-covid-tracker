@@ -5,10 +5,11 @@ export class FormCovidCase extends Component {
     constructor(){
         super();
         this.state = {
-            province: '',
             cases: -1
         }
         this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
 
     styleFunc(){
@@ -27,12 +28,20 @@ export class FormCovidCase extends Component {
 
     handleSubmit(e){
         e.preventDefault();
-        console.log()
+        this.props.changeCase(this.state.cases);
+        this.props.toggleCanAdd();
+        this.props.toggleAdding();
+    }
+
+    handleCancel(){
+        this.props.changeCase({});
         this.props.toggleAdding();
     }
 
     handleChange(e){
-        console.log(e.target.name, e.target.value)
+        this.setState({
+            [e.target.name]: e.target.value
+        })
     }
 
     render() {
@@ -41,17 +50,14 @@ export class FormCovidCase extends Component {
 
                 <form onSubmit={this.handleSubmit} className="ml-4 mt-4">
                     <h2>Add Covid-19 Case</h2>
-                    <div className="form-group">
-                        <label>Type the province name where you clicked</label>
-                        <input type="text" className="form-control mx-sm-1" nname="province" placeholder="Ex: Santiago" aria-describedby="emailHelp" />
-                    </div>
+
                     <div className="form-group">
                         <label >Select the number of cases in that province</label>
-                        <input type="number" min="1" name="cases"  className="form-control" />
+                        <input type="number" min="1" name="cases"  className="form-control" onChange={this.handleChange}/>
                     </div>
 
                     <button className="btn btn-success mt-4 mr-4" type="submit" >Save</button>
-                    <button className="btn btn-danger mt-4" onClick={this.props.toggleAdding}>Cancel</button>
+                    <button className="btn btn-danger mt-4" onClick={this.handleCancel}>Cancel</button>
                 </form>
             </div>
         )
