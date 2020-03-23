@@ -28,7 +28,7 @@ export class Map extends Component {
             border: '2px solid black',
             marginLeft: 'auto',
             marginRight: 'auto',
-            marginTop: '1rem'
+            marginTop: '1rem',
         }
     }
 
