@@ -25,7 +25,10 @@ export class Map extends Component {
         return{
             height:'30rem',
             width: '60%',
-            border: '2px solid black'
+            border: '2px solid black',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            marginTop: '1rem'
         }
     }
 
