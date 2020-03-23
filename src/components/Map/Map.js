@@ -1,17 +1,18 @@
 import React, { Component } from 'react'
 import L from 'leaflet';
+import FormCovidCase from '../FormCovidCase';
 
 export class Map extends Component {
 
-        constructor(){
-            super();
-            this.styleFunc = this.styleFunc.bind(this);
-            this.onMapClick = this.onMapClick.bind(this);
+    constructor(){
+        super();
+        this.styleFunc = this.styleFunc.bind(this);
+        this.onMapClick = this.onMapClick.bind(this);
 
-            this.map = null;
-            this.popup = new L.popup();
-            
-        }
+        this.map = null;
+        this.popup = new L.popup();
+    }
+
 
     componentDidMount(){
         const coord = [18.4718609, -69.8923187]
@@ -41,10 +42,16 @@ export class Map extends Component {
     
 
     onMapClick(e) {
-        this.popup
-            .setLatLng(e.latlng)
-            .setContent("You clicked the map at " + e.latlng.toString())
-            .openOn(this.map);
+        // this.popup
+        //     .setLatLng(e.latlng)
+        //     .setContent("You clicked the map at " + e.latlng.toString())
+        //     .openOn(this.map);
+        // console.log(this.state.adding)
+        this.props.toggleAdding()
+        // let marker = L.marker(e.latlng).addTo(this.map);
+        // let province = prompt("Write the province name");
+        // let number = prompt("Write the number of cases");
+        // marker.bindPopup(`Province: ${province}\n Cases: ${number}`);
     }
 
 
@@ -52,7 +59,7 @@ export class Map extends Component {
     render() {
         return (
             <div id="map" style={this.styleFunc()}>
-
+                
             </div>
         )
     }
