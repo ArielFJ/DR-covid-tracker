@@ -6,11 +6,17 @@ export class Map extends Component {
         constructor(){
             super();
             this.styleFunc = this.styleFunc.bind(this);
+            this.onMapClick = this.onMapClick.bind(this);
+
+            this.map = null;
+            this.popup = new L.popup();
+            
         }
 
     componentDidMount(){
         const coord = [18.4718609, -69.8923187]
-        let map = new L.Map("map").setView(coord, 8);
+        this.map = new L.Map("map").setView(coord, 8);
+        this.map.on('click', this.onMapClick);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
@@ -18,7 +24,7 @@ export class Map extends Component {
             tileSize: 512,
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
-        }).addTo(map);
+        }).addTo(this.map);
     }
 
     styleFunc(){
@@ -31,6 +37,17 @@ export class Map extends Component {
             marginTop: '1rem',
         }
     }
+
+    
+
+    onMapClick(e) {
+        this.popup
+            .setLatLng(e.latlng)
+            .setContent("You clicked the map at " + e.latlng.toString())
+            .openOn(this.map);
+    }
+
+
 
     render() {
         return (
