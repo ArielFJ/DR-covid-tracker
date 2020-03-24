@@ -2,7 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import firebase from 'firebase/app';
+
+
+const firebaseConfig = {
+    apiKey: "AIzaSyALHLrRDY_lKbtWfKhbof8AeYt4YnJEERA",
+    authDomain: "covid-tracker-8393a.firebaseapp.com",
+    databaseURL: "https://covid-tracker-8393a.firebaseio.com",
+    projectId: "covid-tracker-8393a",
+    storageBucket: "covid-tracker-8393a.appspot.com",
+    messagingSenderId: "649220265239",
+    appId: "1:649220265239:web:f637ec231a0fca9ed49352"
+};
+
+firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>
@@ -11,7 +24,3 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
