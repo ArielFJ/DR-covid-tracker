@@ -29,11 +29,11 @@ export class FormCovidCase extends Component {
     render() {
         return (
             <form onSubmit={this.handleSubmit} className="ml-4 mt-4">
-                <h2>Add Covid-19 Case</h2>
+                <h2>Set Covid-19 Case</h2>
 
                 <div className="form-group pr-5">
                     <label >Select the number of cases</label>
-                    <input type="number" min="1" name="cases" defaultValue="1" className="form-control" onChange={this.handleChange} />
+                    <input type="number" min="1" name="cases" defaultValue={this.props.numberOfCases} className="form-control" onChange={this.handleChange} />
                 </div>
 
                 <button className="btn btn-success mt-4 mr-3" type="submit" >Save</button>

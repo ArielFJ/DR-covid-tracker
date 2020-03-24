@@ -25,13 +25,14 @@ export class FloatingDiv extends Component {
 
     handleCancel() {
         this.props.changeCase({});
+        this.props.toggleBounds(false);
         this.props.toggleAdding();
     }
 
     renderInnerElement(){
         if(this.props.user){
             if(this.props.onBounds){
-                return <FormCovidCase changeCase={this.props.changeCase} toggleCanAdd={this.props.toggleCanAdd} toggleAdding={this.props.toggleAdding} />
+                return <FormCovidCase changeCase={this.props.changeCase} toggleCanAdd={this.props.toggleCanAdd} toggleAdding={this.props.toggleAdding} numberOfCases={this.props.numberOfCases}  />
             }else{
                 return <MessageDiv title="Out of bounds" message="Please, limit the marks to Dominican Republic." />
             }

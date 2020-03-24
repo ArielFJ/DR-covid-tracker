@@ -13,12 +13,14 @@ export class CovidMap extends Component {
             adding: false,
             cases: 0,
             canAddCase: false,
-            isOnBounds: false
+            isOnBounds: false,
+            numberOfCasesInMarker: 1
         }
         this.toggleAdding = this.toggleAdding.bind(this);
         this.changeCase = this.changeCase.bind(this);
         this.toggleCanAdd = this.toggleCanAdd.bind(this);
         this.toggleBounds = this.toggleBounds.bind(this);
+        this.changeCasesInMarker = this.changeCasesInMarker.bind(this);
     }
 
     toggleBounds(value){
@@ -51,19 +53,27 @@ export class CovidMap extends Component {
         })
     }
 
+    changeCasesInMarker(n){
+        this.setState({
+            numberOfCasesInMarker: n
+        })
+    }
+
     render() {
         return (
             <Fragment>
                 <Map toggleAdding={this.toggleAdding} adding={this.state.adding} cases={this.state.cases} 
                         user={this.props.user} canAdd={this.state.canAddCase} toggleCanAdd={this.toggleCanAdd} 
                         toggleBounds={this.toggleBounds} handleUpload={this.props.handleUpload}
-                        coordinates={this.props.coords} />
+                        coordinates={this.props.coords}  changeCasesInMarker={this.changeCasesInMarker}/>
                 <CovidStats />
                 {this.state.adding && <FloatingDiv toggleAdding={this.toggleAdding} 
                                         changeCase={this.changeCase}
                                         toggleCanAdd={this.toggleCanAdd}
                                         user={this.props.user} 
                                         onBounds={this.state.isOnBounds}
+                                        toggleBounds={this.toggleBounds}
+                                        numberOfCases={this.state.numberOfCasesInMarker}
                                          />}
             </Fragment>
         )

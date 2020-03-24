@@ -10,6 +10,7 @@ export class Map extends Component {
         this.setNewMark = this.setNewMark.bind(this);
 
         this.map = null;
+        this.layerGroup = L.layerGroup();
         this.popup = new L.popup();
         this.state = {
             coords: {}
@@ -26,6 +27,7 @@ export class Map extends Component {
     componentDidMount() {
         const coord = [18.4718609, -69.8923187]
         this.map = new L.Map("map").setView(coord, 8);
+        this.layerGroup.addTo(this.map);
         this.map.on('click', this.onMapClick);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -51,6 +53,7 @@ export class Map extends Component {
     }
 
     componentDidUpdate() {
+        
         if (this.props.canAdd) {
             this.setNewMark({
                 coords: this.state.coords,
@@ -66,9 +69,8 @@ export class Map extends Component {
     }
 
     setNewMark(data, open){
-        let marker = L.marker(data.coords).addTo(this.map);
+        let marker = L.marker(data.coords, L.divIcon({className: 'my-div-icon'})).addTo(this.layerGroup);
         let div = this.createPopupInnerData('Edit', data.cases);
-    
         marker.bindPopup(div);
 
         if(open){
@@ -82,7 +84,7 @@ export class Map extends Component {
         btn.classList = 'btn btn-primary';
         btn.innerHTML = label;
         btn.onclick = () => {
-            alert(cases);
+            this.getMarkData(btn);
         }
         div.appendChild(document.createTextNode(`Cases: ${cases}`));
         div.appendChild(document.createElement('br'));
@@ -90,15 +92,14 @@ export class Map extends Component {
         return div;
     }
 
-    getMarkData(e){
-        console.log(e.target)
+    getMarkData(object){
+        let cases = Number(object.parentElement.innerHTML.split('<')[0].split(' ')[1]);
+        this.props.changeCasesInMarker(cases)
+        this.props.toggleBounds(true)
+        this.props.toggleAdding()
     }
 
     onMapClick(e) {
-        // this.popup
-        //     .setLatLng(e.latlng)
-        //     .setContent("You clicked the map at " + e.latlng.toString())
-        //     .openOn(this.map);
         if (this.props.user && !this.props.adding) {
             if (e.latlng.lng > this.limits.west &&
                 e.latlng.lng < this.limits.east &&
@@ -113,16 +114,11 @@ export class Map extends Component {
             }
         } 
         this.props.toggleAdding();
-        // console.log(this.state.adding)
-
-        // let marker = L.marker(e.latlng).addTo(this.map);
-        // let province = prompt("Write the province name");
-        // let number = prompt("Write the number of cases");
-        // marker.bindPopup(`Province: ${province}\n Cases: ${number}`);
     }
 
 
     render() {
+        this.layerGroup.clearLayers();
         this.props.coordinates.forEach(coord => {
             let {lat, lng, cases} = coord;
             this.setNewMark({
