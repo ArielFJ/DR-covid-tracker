@@ -3,14 +3,14 @@ import L from 'leaflet';
 
 export class Map extends Component {
 
-    constructor(){
+    constructor() {
         super();
         this.styleFunc = this.styleFunc.bind(this);
         this.onMapClick = this.onMapClick.bind(this);
 
         this.map = null;
         this.popup = new L.popup();
-        this.state= {
+        this.state = {
             coords: {}
         }
         this.limits = {
@@ -22,8 +22,7 @@ export class Map extends Component {
     }
 
 
-    componentDidMount(){
-    
+    componentDidMount() {
         const coord = [18.4718609, -69.8923187]
         this.map = new L.Map("map").setView(coord, 8);
         this.map.on('click', this.onMapClick);
@@ -38,9 +37,9 @@ export class Map extends Component {
         this.map.doubleClickZoom.disable();
     }
 
-    styleFunc(){
-        return{
-            height:'30rem',
+    styleFunc() {
+        return {
+            height: '30rem',
             width: '100%',
             border: '2px solid black',
             marginLeft: 'auto',
@@ -49,37 +48,36 @@ export class Map extends Component {
         }
     }
 
-    componentDidUpdate(){
-        if(this.props.canAdd){
+    componentDidUpdate() {
+        if (this.props.canAdd) {
             let marker = L.marker(this.state.coords).addTo(this.map);
             marker.bindPopup(`Cases: ${this.props.cases} <a href="www.google.com" target="blank">Edit</a>`).openPopup();
             this.props.toggleCanAdd();
         }
     }
-    
+
 
     onMapClick(e) {
         // this.popup
         //     .setLatLng(e.latlng)
         //     .setContent("You clicked the map at " + e.latlng.toString())
         //     .openOn(this.map);
-        console.log(e.latlng)
-        if(e.latlng.lng > this.limits.west &&
-            e.latlng.lng < this.limits.east &&
-            e.latlng.lat > this.limits.south &&
-            e.latlng.lat < this.limits.north){
-                console.log('dentro')
+        if (this.props.user && !this.props.adding) {
+            if (e.latlng.lng > this.limits.west &&
+                e.latlng.lng < this.limits.east &&
+                e.latlng.lat > this.limits.south &&
+                e.latlng.lat < this.limits.north) {
+                this.setState({
+                    coords: e.latlng
+                })                
+                this.props.toggleBounds(true);
             }else{
-                console.log('fuera')
+                this.props.toggleBounds(false);
             }
-
+        } 
+        this.props.toggleAdding();
         // console.log(this.state.adding)
-        // if(!this.props.adding && this.props.user){   
-        //     this.setState({
-        //         coords: e.latlng
-        //     })
-        //     this.props.toggleAdding();
-        // }
+
         // let marker = L.marker(e.latlng).addTo(this.map);
         // let province = prompt("Write the province name");
         // let number = prompt("Write the number of cases");
@@ -90,7 +88,7 @@ export class Map extends Component {
     render() {
         return (
             <div id="map" style={this.styleFunc()}>
-                
+
             </div>
         )
     }
