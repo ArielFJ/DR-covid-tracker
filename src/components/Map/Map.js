@@ -13,6 +13,12 @@ export class Map extends Component {
         this.state= {
             coords: {}
         }
+        this.limits = {
+            north: 19.97,
+            east: -68.31,
+            south: 17.51,
+            west: -72.03
+        }
     }
 
 
@@ -57,13 +63,23 @@ export class Map extends Component {
         //     .setLatLng(e.latlng)
         //     .setContent("You clicked the map at " + e.latlng.toString())
         //     .openOn(this.map);
+        console.log(e.latlng)
+        if(e.latlng.lng > this.limits.west &&
+            e.latlng.lng < this.limits.east &&
+            e.latlng.lat > this.limits.south &&
+            e.latlng.lat < this.limits.north){
+                console.log('dentro')
+            }else{
+                console.log('fuera')
+            }
+
         // console.log(this.state.adding)
-        if(!this.props.adding && this.props.user){   
-            this.setState({
-                coords: e.latlng
-            })
-            this.props.toggleAdding();
-        }
+        // if(!this.props.adding && this.props.user){   
+        //     this.setState({
+        //         coords: e.latlng
+        //     })
+        //     this.props.toggleAdding();
+        // }
         // let marker = L.marker(e.latlng).addTo(this.map);
         // let province = prompt("Write the province name");
         // let number = prompt("Write the number of cases");
