@@ -29,7 +29,7 @@ export class Map extends Component {
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
-        
+        this.map.doubleClickZoom.disable();
     }
 
     styleFunc(){

@@ -22,7 +22,6 @@ export class FormCovidCase extends Component {
             left: '26%',
             zIndex:'1000',
             color: 'white',
-            paddingRight: '100px'
         }
     }
 
@@ -51,12 +50,12 @@ export class FormCovidCase extends Component {
                 <form onSubmit={this.handleSubmit} className="ml-4 mt-4">
                     <h2>Add Covid-19 Case</h2>
 
-                    <div className="form-group">
-                        <label >Select the number of cases in that province</label>
+                    <div className="form-group pr-5">
+                        <label >Select the number of cases</label>
                         <input type="number" min="1" name="cases"  className="form-control" onChange={this.handleChange}/>
                     </div>
 
-                    <button className="btn btn-success mt-4 mr-4" type="submit" >Save</button>
+                    <button className="btn btn-success mt-4 mr-3" type="submit" >Save</button>
                     <button className="btn btn-danger mt-4" onClick={this.handleCancel}>Cancel</button>
                 </form>
             </div>
