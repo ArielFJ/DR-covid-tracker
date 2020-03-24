@@ -80,9 +80,11 @@ class App extends React.Component {
         <Router>
           { this.renderLoginButton() }
           <NavMenu />
-          <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} />
+          {/* <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> */}
 
-          {/* <Route path="/" render={()=>{ return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> }} /> */}
+          <Route exact path="/" render={()=>{ return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> }} />
+          {/* <Route path="/news" component={FloatingDiv} />
+          <Route path="/timeline" component={FloatingDiv} /> */}
         </Router>
       </div>
     );
