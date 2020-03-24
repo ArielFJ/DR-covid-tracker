@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import firebase from 'firebase';
+import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
 
 
 // Components
@@ -76,9 +77,13 @@ class App extends React.Component {
   render() {
     return (
       <div className="container-xl full-height ">
-        { this.renderLoginButton() }
-        <NavMenu />
-        <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} />
+        <Router>
+          { this.renderLoginButton() }
+          <NavMenu />
+          <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} />
+
+          {/* <Route path="/" render={()=>{ return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> }} /> */}
+        </Router>
       </div>
     );
   }

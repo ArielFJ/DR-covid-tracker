@@ -7,9 +7,6 @@ export class FloatingDiv extends Component {
 
     constructor(){
         super();
-        this.state = {
-            cases: -1
-        }
         this.handleCancel = this.handleCancel.bind(this);
     }
 

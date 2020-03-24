@@ -5,7 +5,7 @@ export class FormCovidCase extends Component {
     constructor() {
         super();
         this.state = {
-            cases: -1
+            cases: 1
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);

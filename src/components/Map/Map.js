@@ -67,10 +67,31 @@ export class Map extends Component {
 
     setNewMark(data, open){
         let marker = L.marker(data.coords).addTo(this.map);
-        marker.bindPopup(`Cases: ${data.cases} <a href="www.google.com" target="blank">Edit</a>`)
+        let div = this.createPopupInnerData('Edit', data.cases);
+    
+        marker.bindPopup(div);
+
         if(open){
             marker.openPopup();
         }
+    }
+
+    createPopupInnerData(label, cases) {
+        var div = document.createElement('div');
+        var btn = document.createElement('button');
+        btn.classList = 'btn btn-primary';
+        btn.innerHTML = label;
+        btn.onclick = () => {
+            alert(cases);
+        }
+        div.appendChild(document.createTextNode(`Cases: ${cases}`));
+        div.appendChild(document.createElement('br'));
+        div.appendChild(btn);
+        return div;
+    }
+
+    getMarkData(e){
+        console.log(e.target)
     }
 
     onMapClick(e) {
