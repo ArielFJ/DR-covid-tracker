@@ -33,7 +33,7 @@ export class FormCovidCase extends Component {
 
                 <div className="form-group pr-5">
                     <label >Select the number of cases</label>
-                    <input type="number" min="1" name="cases" className="form-control" onChange={this.handleChange} />
+                    <input type="number" min="1" name="cases" defaultValue="1" className="form-control" onChange={this.handleChange} />
                 </div>
 
                 <button className="btn btn-success mt-4 mr-3" type="submit" >Save</button>

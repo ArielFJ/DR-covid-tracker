@@ -46,7 +46,6 @@ export class CovidMap extends Component {
     }
 
     changeCase(cases){
-        console.log(cases)
         this.setState({
             cases
         })
@@ -57,13 +56,15 @@ export class CovidMap extends Component {
             <Fragment>
                 <Map toggleAdding={this.toggleAdding} adding={this.state.adding} cases={this.state.cases} 
                         user={this.props.user} canAdd={this.state.canAddCase} toggleCanAdd={this.toggleCanAdd} 
-                        toggleBounds={this.toggleBounds} />
+                        toggleBounds={this.toggleBounds} handleUpload={this.props.handleUpload}
+                        coordinates={this.props.coords} />
                 <CovidStats />
                 {this.state.adding && <FloatingDiv toggleAdding={this.toggleAdding} 
                                         changeCase={this.changeCase}
                                         toggleCanAdd={this.toggleCanAdd}
                                         user={this.props.user} 
-                                        onBounds={this.state.isOnBounds} />}
+                                        onBounds={this.state.isOnBounds}
+                                         />}
             </Fragment>
         )
     }

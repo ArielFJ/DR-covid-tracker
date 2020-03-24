@@ -7,6 +7,7 @@ export class Map extends Component {
         super();
         this.styleFunc = this.styleFunc.bind(this);
         this.onMapClick = this.onMapClick.bind(this);
+        this.setNewMark = this.setNewMark.bind(this);
 
         this.map = null;
         this.popup = new L.popup();
@@ -35,6 +36,7 @@ export class Map extends Component {
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
         this.map.doubleClickZoom.disable();
+        
     }
 
     styleFunc() {
@@ -50,12 +52,26 @@ export class Map extends Component {
 
     componentDidUpdate() {
         if (this.props.canAdd) {
-            let marker = L.marker(this.state.coords).addTo(this.map);
-            marker.bindPopup(`Cases: ${this.props.cases} <a href="www.google.com" target="blank">Edit</a>`).openPopup();
+            this.setNewMark({
+                coords: this.state.coords,
+                cases: this.props.cases
+            }, true)
             this.props.toggleCanAdd();
+            this.props.handleUpload({
+                lat: this.state.coords.lat,
+                lng: this.state.coords.lng,
+                cases: this.props.cases
+            });
         }
     }
 
+    setNewMark(data, open){
+        let marker = L.marker(data.coords).addTo(this.map);
+        marker.bindPopup(`Cases: ${data.cases} <a href="www.google.com" target="blank">Edit</a>`)
+        if(open){
+            marker.openPopup();
+        }
+    }
 
     onMapClick(e) {
         // this.popup
@@ -86,6 +102,16 @@ export class Map extends Component {
 
 
     render() {
+        this.props.coordinates.forEach(coord => {
+            let {lat, lng, cases} = coord;
+            this.setNewMark({
+                coords: {
+                    lat,
+                    lng
+                },
+                cases
+            }, false)
+        });
         return (
             <div id="map" style={this.styleFunc()}>
 
