@@ -60,21 +60,35 @@ export class CovidMap extends Component {
     }
 
     render() {
+        const mapProps = {
+            toggleAdding:this.toggleAdding,
+            adding:this.state.adding,
+            cases:this.state.cases, 
+            user:this.props.user,
+            canAdd:this.state.canAddCase,
+            toggleCanAdd:this.toggleCanAdd, 
+            toggleBounds:this.toggleBounds,
+            handleUpload:this.props.handleUpload,
+            coordinates:this.props.coords,
+            changeCasesInMarker:this.changeCasesInMarker
+        }
+
+        const divProps = {
+            toggleAdding:this.toggleAdding,
+            changeCase:this.changeCase,
+            toggleCanAdd:this.toggleCanAdd,
+            user:this.props.user,
+            onBounds:this.state.isOnBounds,
+            toggleBounds:this.toggleBounds,
+            numberOfCases:this.state.numberOfCasesInMarker,
+            changeCasesInMarker:this.changeCasesInMarker
+        }
+
         return (
             <Fragment>
-                <Map toggleAdding={this.toggleAdding} adding={this.state.adding} cases={this.state.cases} 
-                        user={this.props.user} canAdd={this.state.canAddCase} toggleCanAdd={this.toggleCanAdd} 
-                        toggleBounds={this.toggleBounds} handleUpload={this.props.handleUpload}
-                        coordinates={this.props.coords}  changeCasesInMarker={this.changeCasesInMarker}/>
+                <Map mapProps={mapProps}/>
                 <CovidStats />
-                {this.state.adding && <FloatingDiv toggleAdding={this.toggleAdding} 
-                                        changeCase={this.changeCase}
-                                        toggleCanAdd={this.toggleCanAdd}
-                                        user={this.props.user} 
-                                        onBounds={this.state.isOnBounds}
-                                        toggleBounds={this.toggleBounds}
-                                        numberOfCases={this.state.numberOfCasesInMarker}
-                                         />}
+                {this.state.adding && <FloatingDiv divProps={divProps} />}
             </Fragment>
         )
     }

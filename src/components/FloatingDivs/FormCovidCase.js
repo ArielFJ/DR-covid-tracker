@@ -13,9 +13,10 @@ export class FormCovidCase extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.props.changeCase(this.state.cases);
-        this.props.toggleCanAdd();
-        this.props.toggleAdding();
+        this.props.formProps.changeCase(this.state.cases);
+        this.props.formProps.toggleCanAdd();
+        this.props.formProps.toggleAdding();
+        this.props.formProps.changeCasesInMarker(1);
     }
 
     
@@ -33,7 +34,7 @@ export class FormCovidCase extends Component {
 
                 <div className="form-group pr-5">
                     <label >Select the number of cases</label>
-                    <input type="number" min="1" name="cases" defaultValue={this.props.numberOfCases} className="form-control" onChange={this.handleChange} />
+                    <input type="number" min="1" name="cases" defaultValue={this.props.formProps.numberOfCases} className="form-control" onChange={this.handleChange} />
                 </div>
 
                 <button className="btn btn-success mt-4 mr-3" type="submit" >Save</button>

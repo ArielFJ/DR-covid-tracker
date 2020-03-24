@@ -8,6 +8,7 @@ export class Map extends Component {
         this.styleFunc = this.styleFunc.bind(this);
         this.onMapClick = this.onMapClick.bind(this);
         this.setNewMark = this.setNewMark.bind(this);
+        this.loadAllMarkers = this.loadAllMarkers.bind(this);
 
         this.map = null;
         this.layerGroup = L.layerGroup();
@@ -54,16 +55,16 @@ export class Map extends Component {
 
     componentDidUpdate() {
         
-        if (this.props.canAdd) {
+        if (this.props.mapProps.canAdd) {
             this.setNewMark({
                 coords: this.state.coords,
-                cases: this.props.cases
+                cases: this.props.mapProps.cases
             }, true)
-            this.props.toggleCanAdd();
-            this.props.handleUpload({
+            this.props.mapProps.toggleCanAdd();
+            this.props.mapProps.handleUpload({
                 lat: this.state.coords.lat,
                 lng: this.state.coords.lng,
-                cases: this.props.cases
+                cases: this.props.mapProps.cases
             });
         }
     }
@@ -94,32 +95,15 @@ export class Map extends Component {
 
     getMarkData(object){
         let cases = Number(object.parentElement.innerHTML.split('<')[0].split(' ')[1]);
-        this.props.changeCasesInMarker(cases)
-        this.props.toggleBounds(true)
-        this.props.toggleAdding()
+        this.props.mapProps.changeCasesInMarker(cases)
+        this.props.mapProps.toggleBounds(true)
+        this.props.mapProps.toggleAdding()
+        this.loadAllMarkers()
     }
 
-    onMapClick(e) {
-        if (this.props.user && !this.props.adding) {
-            if (e.latlng.lng > this.limits.west &&
-                e.latlng.lng < this.limits.east &&
-                e.latlng.lat > this.limits.south &&
-                e.latlng.lat < this.limits.north) {
-                this.setState({
-                    coords: e.latlng
-                })                
-                this.props.toggleBounds(true);
-            }else{
-                this.props.toggleBounds(false);
-            }
-        } 
-        this.props.toggleAdding();
-    }
-
-
-    render() {
+    loadAllMarkers(){
         this.layerGroup.clearLayers();
-        this.props.coordinates.forEach(coord => {
+        this.props.mapProps.coordinates.forEach(coord => {
             let {lat, lng, cases} = coord;
             this.setNewMark({
                 coords: {
@@ -129,6 +113,28 @@ export class Map extends Component {
                 cases
             }, false)
         });
+    }
+
+    onMapClick(e) {
+        if (this.props.mapProps.user && !this.props.mapProps.adding) {
+            if (e.latlng.lng > this.limits.west &&
+                e.latlng.lng < this.limits.east &&
+                e.latlng.lat > this.limits.south &&
+                e.latlng.lat < this.limits.north) {
+                this.setState({
+                    coords: e.latlng
+                })                
+                this.props.mapProps.toggleBounds(true);
+            }else{
+                this.props.mapProps.toggleBounds(false);
+            }
+        } 
+        this.props.mapProps.toggleAdding();
+    }
+
+
+    render() {
+        this.loadAllMarkers()
         return (
             <div id="map" style={this.styleFunc()}>
 

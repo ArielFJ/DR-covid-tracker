@@ -1,7 +1,9 @@
 import React from 'react';
 import './App.css';
-import firebase from 'firebase';
-import {BrowserRouter as Router, Link, Route} from 'react-router-dom';
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/database';
+import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 
 // Components
@@ -33,12 +35,6 @@ class App extends React.Component {
       })
     });
 
-    // this.dbRef.set([{
-    //   lat:1,lng:2
-    // },{
-    //   lat:3, lng:4
-    // }])
-
     this.dbRef.on('value', snap => {
       let coords = snap.val() !== null ? snap.val() : [];
       this.setState({
@@ -55,15 +51,11 @@ class App extends React.Component {
   handleAuth(){
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    firebase.auth().signInWithPopup(provider)
-      .then(result => console.log(`${result.user.email} ha ingresado`))
-      .catch(error => console.log(`Error ${error.code}: ${error.message}`))
+    firebase.auth().signInWithPopup(provider);
   }
 
   handleLogout(){
-    firebase.auth().signOut()
-      .then(result => console.log(`${result.user.email} ha salido`))
-      .catch(error => console.log(`Error ${error.code}: ${error.message}`))
+    firebase.auth().signOut();
   }
 
   renderLoginButton(){

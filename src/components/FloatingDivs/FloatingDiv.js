@@ -24,15 +24,22 @@ export class FloatingDiv extends Component {
     }
 
     handleCancel() {
-        this.props.changeCase({});
-        this.props.toggleBounds(false);
-        this.props.toggleAdding();
+        this.props.divProps.changeCase({});
+        this.props.divProps.toggleBounds(false);
+        this.props.divProps.toggleAdding();
     }
 
     renderInnerElement(){
-        if(this.props.user){
-            if(this.props.onBounds){
-                return <FormCovidCase changeCase={this.props.changeCase} toggleCanAdd={this.props.toggleCanAdd} toggleAdding={this.props.toggleAdding} numberOfCases={this.props.numberOfCases}  />
+        if(this.props.divProps.user){
+            if(this.props.divProps.onBounds){
+                const formProps = {
+                    changeCase:this.props.divProps.changeCase,
+                    toggleCanAdd:this.props.divProps.toggleCanAdd,
+                    toggleAdding:this.props.divProps.toggleAdding,
+                    numberOfCases:this.props.divProps.numberOfCases,
+                    changeCasesInMarker:this.props.divProps.changeCasesInMarker
+                }
+                return <FormCovidCase formProps={formProps}  />
             }else{
                 return <MessageDiv title="Out of bounds" message="Please, limit the marks to Dominican Republic." />
             }
