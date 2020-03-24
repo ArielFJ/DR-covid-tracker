@@ -17,6 +17,7 @@ export class Map extends Component {
 
 
     componentDidMount(){
+    
         const coord = [18.4718609, -69.8923187]
         this.map = new L.Map("map").setView(coord, 8);
         this.map.on('click', this.onMapClick);
@@ -44,7 +45,6 @@ export class Map extends Component {
 
     componentDidUpdate(){
         if(this.props.canAdd){
-            console.log('props',this.props)
             let marker = L.marker(this.state.coords).addTo(this.map);
             marker.bindPopup(`Cases: ${this.props.cases} <a href="www.google.com" target="blank">Edit</a>`).openPopup();
             this.props.toggleCanAdd();
@@ -58,7 +58,7 @@ export class Map extends Component {
         //     .setContent("You clicked the map at " + e.latlng.toString())
         //     .openOn(this.map);
         // console.log(this.state.adding)
-        if(!this.props.adding){   
+        if(!this.props.adding && this.props.user){   
             this.setState({
                 coords: e.latlng
             })
@@ -72,14 +72,6 @@ export class Map extends Component {
 
 
     render() {
-
-
-        // if(this.props.canAdd){
-        //     let Case = this.props.newCase;
-        //     let marker = L.marker([Case.lat, Case.lng]).addTo(this.map);
-        //     marker.bindPopup(`Cases: ${Case.cases}`).openPopup();
-        // }
-
         return (
             <div id="map" style={this.styleFunc()}>
                 

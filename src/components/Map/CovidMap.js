@@ -50,7 +50,7 @@ export class CovidMap extends Component {
         return (
             <Fragment>
                 <Map toggleAdding={this.toggleAdding} adding={this.state.adding} cases={this.state.cases} 
-                        changeCase={this.changeCase} canAdd={this.state.canAddCase} toggleCanAdd={this.toggleCanAdd}/>
+                        user={this.props.user} canAdd={this.state.canAddCase} toggleCanAdd={this.toggleCanAdd}/>
                 <CovidStats />
                 {this.state.adding && <FormCovidCase toggleAdding={this.toggleAdding} 
                                         changeCase={this.changeCase}

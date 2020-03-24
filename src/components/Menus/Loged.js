@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-export class LogSign extends Component {
+export class Loged extends Component {
     render() {
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -11,12 +11,13 @@ export class LogSign extends Component {
 
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
                     <div className=" mr-auto"></div>
-                    <button className="btn btn-outline-primary my-2 mr-3 my-sm-0" type="submit">Log In</button>
-                    <button className="btn btn-outline-primary my-2 my-sm-0" type="submit">Sign In</button>
+                    <img src={this.props.user.photoURL} alt={this.props.user.displayName} width="45px" />
+                    <p className="ml-3">Welcome, {this.props.user.displayName}</p>
+                    <button className="btn btn-outline-danger my-2 ml-3 mr-3 my-sm-0" type="submit" onClick={this.props.handleLogout}>Log Out</button>
                 </div>
             </nav>
         )
     }
 }
 
-export default LogSign
+export default Loged
