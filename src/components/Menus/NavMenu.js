@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {Link, Route} from 'react-router-dom';
 import NewsComponent from '../DataComponents/NewsComponent';
+import GraphsComponent from '../DataComponents/GraphsComponent';
 
 
 export class NavMenu extends Component {
@@ -28,9 +29,7 @@ export class NavMenu extends Component {
                     <Link to="/timeline" className={window.location.pathname.endsWith('timeline')? 'nav-link active' : 'nav-link'} id="timeline" onClick={this.onClick} >Covid-19 Timeline</Link>
                 </li>
                 <Route path="/news" render={() => <NewsComponent user={this.props.user} />} />
-                <Route path="/timeline" render={() =>{
-                    return <h1>World</h1>
-                }} />
+                <Route path="/timeline" render={() => <GraphsComponent user={this.props.user} /> } />
             </ul>
         )
     }
