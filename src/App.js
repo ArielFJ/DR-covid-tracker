@@ -18,7 +18,8 @@ class App extends React.Component {
     super();
     this.state = {
       user: null,
-      coords: []
+      coords: [],
+      //optionSelected: 'home'
     }
 
     this.dbRef = firebase.database().ref('coords');
@@ -26,6 +27,7 @@ class App extends React.Component {
     this.handleAuth = this.handleAuth.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
+    //this.changeOption = this.changeOption.bind(this);
   }
 
   componentDidMount(){
@@ -41,22 +43,70 @@ class App extends React.Component {
         coords
       })
     })
+    
   }
 
   handleUpload(newObject){
-    this.dbRef.set(this.state.coords.concat(newObject),
+    let newCoords = this.state.coords;
+    if(this.state.coords.length > 0){
+      if(this.doesCoordExist(newObject, newCoords)){  
+        newCoords = this.state.coords.map((coord) => {
+          if(coord.lat === newObject.lat && coord.lng === newObject.lng){
+            coord.cases = Number(newObject.cases);
+          }
+          return coord;
+        })
+      }else{
+        newCoords.push(newObject)
+      }
+    }else{
+      newCoords.push(newObject)
+    }
+    this.setState({
+      coords: newCoords
+    })
+    this.dbRef.set(newCoords,
     error => {  })
+  }
+
+  // changeOption(option){
+  //   console.log(option)
+  //   // this.setState({
+  //   //   optionSelected: option
+  //   // })
+  // }
+
+  doesCoordExist(coord, listCoords){
+    for(let c of listCoords){
+      if(c.lat === coord.lat && c.lng === coord.lng){
+        return true;
+      }
+    }
+    return false;
   }
 
   handleAuth(){
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    firebase.auth().signInWithPopup(provider);
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(position => {
+            const obj = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+            localStorage.setItem('userCoords', JSON.stringify(obj))
+          })
+        }
+      })
   }
 
   handleLogout(){
     firebase.auth().signOut();
+    window.location = '/';
   }
+
 
   renderLoginButton(){
     if(this.state.user){
@@ -71,12 +121,11 @@ class App extends React.Component {
       <div className="container-xl full-height ">
         <Router>
           { this.renderLoginButton() }
-          <NavMenu />
-          {/* <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> */}
+          <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} user={this.state.user} />
 
-          <Route exact path="/" render={()=>{ return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> }} />
-          {/* <Route path="/news" component={FloatingDiv} />
-          <Route path="/timeline" component={FloatingDiv} /> */}
+          <Route exact path="/" render={()=>{ 
+            return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} userCoords={this.state.userCoords} /> }} />
+          
         </Router>
       </div>
     );

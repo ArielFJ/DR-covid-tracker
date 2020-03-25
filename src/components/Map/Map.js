@@ -9,6 +9,7 @@ export class Map extends Component {
         this.onMapClick = this.onMapClick.bind(this);
         this.setNewMark = this.setNewMark.bind(this);
         this.loadAllMarkers = this.loadAllMarkers.bind(this);
+        this.showUserLocation = this.showUserLocation.bind(this);
 
         this.map = null;
         this.layerGroup = L.layerGroup();
@@ -39,7 +40,9 @@ export class Map extends Component {
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
         this.map.doubleClickZoom.disable();
-        
+        if(this.props.mapProps.user){
+            this.showUserLocation();
+        }
     }
 
     styleFunc() {
@@ -53,8 +56,20 @@ export class Map extends Component {
         }
     }
 
+    showUserLocation(){
+        let greenIcon = L.icon({
+            iconUrl: 'https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-red.png?raw=true',
+            iconSize:     [24, 36], // size of the icon
+            iconAnchor:   [12, 54], // point of the icon which will correspond to marker's location            
+            popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+        });
+
+        const data = JSON.parse(localStorage.getItem('userCoords'))
+        L.marker(data, {icon: greenIcon}).addTo(this.map).bindPopup('User Location').openPopup();
+    }
+
     componentDidUpdate() {
-        
+        //console.log('stateMap', this.state);
         if (this.props.mapProps.canAdd) {
             this.setNewMark({
                 coords: this.state.coords,
@@ -67,11 +82,19 @@ export class Map extends Component {
                 cases: this.props.mapProps.cases
             });
         }
+        if(this.props.mapProps.user){
+            this.showUserLocation();
+        }
     }
 
     setNewMark(data, open){
+        //console.log(data) // no se está enviando coord al editar 
         let marker = L.marker(data.coords, L.divIcon({className: 'my-div-icon'})).addTo(this.layerGroup);
-        let div = this.createPopupInnerData('Edit', data.cases);
+
+        let div = this.createPopupInnerData('Edit', {
+            lat: data.coords.lat,
+            lng: data.coords.lng,
+            cases:data.cases});
         marker.bindPopup(div);
 
         if(open){
@@ -79,22 +102,42 @@ export class Map extends Component {
         }
     }
 
-    createPopupInnerData(label, cases) {
+    createPopupInnerData(label, data) {
         var div = document.createElement('div');
         var btn = document.createElement('button');
+        var inputLat = document.createElement('input');
+        inputLat.type = 'hidden';
+        inputLat.name = 'lat';
+
+        var inputLng = document.createElement('input');
+        inputLng.type = 'hidden';
+        inputLng.name = 'lng';
+
+        inputLat.value = data.lat;
+        inputLng.value = data.lng;
+
         btn.classList = 'btn btn-primary';
         btn.innerHTML = label;
         btn.onclick = () => {
             this.getMarkData(btn);
         }
-        div.appendChild(document.createTextNode(`Cases: ${cases}`));
+        div.appendChild(document.createTextNode(`Cases: ${data.cases}`));
         div.appendChild(document.createElement('br'));
         div.appendChild(btn);
+        div.appendChild(inputLng);
+        div.appendChild(inputLat);
         return div;
     }
 
     getMarkData(object){
         let cases = Number(object.parentElement.innerHTML.split('<')[0].split(' ')[1]);
+        let coord = {
+            [object.nextSibling.name]: Number(object.nextSibling.value),
+            [object.nextSibling.nextSibling.name]: Number(object.nextSibling.nextSibling.value)
+        };
+        this.setState({
+            coords: coord
+        })
         this.props.mapProps.changeCasesInMarker(cases)
         this.props.mapProps.toggleBounds(true)
         this.props.mapProps.toggleAdding()
@@ -134,7 +177,9 @@ export class Map extends Component {
 
 
     render() {
-        this.loadAllMarkers()
+        if(this.props.mapProps.user){
+            this.loadAllMarkers()
+        }
         return (
             <div id="map" style={this.styleFunc()}>
 
