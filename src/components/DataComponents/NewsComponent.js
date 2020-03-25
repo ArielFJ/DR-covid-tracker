@@ -26,53 +26,37 @@ export class NewsComponent extends Component {
     }
 
     renderNews(){
-        if(Object.keys(this.state.news).length > 0){
-            // const news =  Object.keys(this.state.news).map((key, i) => {
-            //     console.log(this.state.news[key])
-            //     return <News key={i} news={this.state.news[key]}  />
-            // });
-
-            let divs = [];
-            let news = [];
-            let counter = 0;
-            for(let n of Object.keys(this.state.news).reverse()){
-                if(counter % 3 === 0){
-                    divs.push(<div className="row ml-4" style={{width:'100%'}}>{news}</div>);
-                    // divs.push(news);
-                    news = [];
-                    counter = 0;
+        if(this.props.user){
+            if(Object.keys(this.state.news).length > 0){
+                let divs = [];
+                let news = [];
+                let counter = 0;
+                for(let n of Object.keys(this.state.news).reverse()){
+                    if(counter % 3 === 0){
+                        divs.push(<div className="row ml-4" style={{width:'100%'}}>{news}</div>);
+                        news = [];
+                        counter = 0;
+                    }
+                    if(n !== 'stat'){
+                        news.push(<News key={n} news={this.state.news[n]}  />)
+                        counter++;
+                    }
                 }
-                if(n !== 'stat'){
-                    news.push(<News key={n} news={this.state.news[n]}  />)
-                    // news.push(n)
-                    counter++;
-                }
+                console.log(divs)
+                return divs;
+            }else{
+                return <h1 className="display-4" >Loading...</h1>
             }
-            console.log(divs)
-            return divs;
-
-
-            // let news = [];
-            // for(let n of Object.keys(this.state.news)){
-            //     if(n !== 'stat'){
-            //         news.push(<News key={n} news={this.state.news[n]}  />)
-            //     }
-            // }
-            // console.log(news)
-            // return news.reverse();
-        }else{
-            return <h1 className="display-4" >Loading...</h1>
+        } else{
+            return <h1 className="display-4">You have to log in to see last news.</h1>
         }
     }
 
     render() {
         
         return (
-            <div className="container text-center mt-4" >
-                <ul>
-                { this.renderNews() } 
-                
-                </ul>
+            <div className="container text-center mt-4" >                
+                { this.renderNews() }                 
             </div>
         )
     }

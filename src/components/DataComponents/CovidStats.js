@@ -17,7 +17,7 @@ export class CovidStats extends Component {
     render() {
         return (
             <div className="text-center ">
-                <h1>Stats</h1>
+                <h1 className="display-4">Stats</h1>
                 <ul className="list-group mb-5">
                 {   Object.keys(this.state.info).length > 0 &&
                     Object.keys(this.state.info).map((key,i) => {

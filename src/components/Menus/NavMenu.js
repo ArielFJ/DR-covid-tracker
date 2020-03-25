@@ -27,7 +27,7 @@ export class NavMenu extends Component {
                 <li className="nav-item">
                     <Link to="/timeline" className={window.location.pathname.endsWith('timeline')? 'nav-link active' : 'nav-link'} id="timeline" onClick={this.onClick} >Covid-19 Timeline</Link>
                 </li>
-                <Route path="/news" component={NewsComponent} />
+                <Route path="/news" render={() => <NewsComponent user={this.props.user} />} />
                 <Route path="/timeline" render={() =>{
                     return <h1>World</h1>
                 }} />

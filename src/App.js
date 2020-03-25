@@ -121,7 +121,7 @@ class App extends React.Component {
       <div className="container-xl full-height ">
         <Router>
           { this.renderLoginButton() }
-          <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} />
+          <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} user={this.state.user} />
 
           <Route exact path="/" render={()=>{ 
             return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} userCoords={this.state.userCoords} /> }} />
