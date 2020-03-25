@@ -58,13 +58,9 @@ export class Map extends Component {
 
     showUserLocation(){
         let greenIcon = L.icon({
-            iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
-            shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
-        
-            iconSize:     [20, 47], // size of the icon
-            shadowSize:   [18, 40], // size of the shadow
-            iconAnchor:   [12, 54], // point of the icon which will correspond to marker's location
-            shadowAnchor: [0, 47],  // the same for the shadow
+            iconUrl: 'https://github.com/pointhi/leaflet-color-markers/blob/master/img/marker-icon-red.png?raw=true',
+            iconSize:     [24, 36], // size of the icon
+            iconAnchor:   [12, 54], // point of the icon which will correspond to marker's location            
             popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
         });
 
@@ -182,7 +178,9 @@ export class Map extends Component {
 
 
     render() {
-        this.loadAllMarkers()
+        if(this.props.mapProps.user){
+            this.loadAllMarkers()
+        }
         return (
             <div id="map" style={this.styleFunc()}>
 
