@@ -54,7 +54,7 @@ export class Map extends Component {
     }
 
     componentDidUpdate() {
-        
+        //console.log('stateMap', this.state);
         if (this.props.mapProps.canAdd) {
             this.setNewMark({
                 coords: this.state.coords,
@@ -70,8 +70,13 @@ export class Map extends Component {
     }
 
     setNewMark(data, open){
+        //console.log(data) // no se está enviando coord al editar 
         let marker = L.marker(data.coords, L.divIcon({className: 'my-div-icon'})).addTo(this.layerGroup);
-        let div = this.createPopupInnerData('Edit', data.cases);
+
+        let div = this.createPopupInnerData('Edit', {
+            lat: data.coords.lat,
+            lng: data.coords.lng,
+            cases:data.cases});
         marker.bindPopup(div);
 
         if(open){
@@ -79,22 +84,42 @@ export class Map extends Component {
         }
     }
 
-    createPopupInnerData(label, cases) {
+    createPopupInnerData(label, data) {
         var div = document.createElement('div');
         var btn = document.createElement('button');
+        var inputLat = document.createElement('input');
+        inputLat.type = 'hidden';
+        inputLat.name = 'lat';
+
+        var inputLng = document.createElement('input');
+        inputLng.type = 'hidden';
+        inputLng.name = 'lng';
+
+        inputLat.value = data.lat;
+        inputLng.value = data.lng;
+
         btn.classList = 'btn btn-primary';
         btn.innerHTML = label;
         btn.onclick = () => {
             this.getMarkData(btn);
         }
-        div.appendChild(document.createTextNode(`Cases: ${cases}`));
+        div.appendChild(document.createTextNode(`Cases: ${data.cases}`));
         div.appendChild(document.createElement('br'));
         div.appendChild(btn);
+        div.appendChild(inputLng);
+        div.appendChild(inputLat);
         return div;
     }
 
     getMarkData(object){
         let cases = Number(object.parentElement.innerHTML.split('<')[0].split(' ')[1]);
+        let coord = {
+            [object.nextSibling.name]: Number(object.nextSibling.value),
+            [object.nextSibling.nextSibling.name]: Number(object.nextSibling.nextSibling.value)
+        };
+        this.setState({
+            coords: coord
+        })
         this.props.mapProps.changeCasesInMarker(cases)
         this.props.mapProps.toggleBounds(true)
         this.props.mapProps.toggleAdding()

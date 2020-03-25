@@ -18,7 +18,8 @@ class App extends React.Component {
     super();
     this.state = {
       user: null,
-      coords: []
+      coords: [],
+      userCoords: {}
     }
 
     this.dbRef = firebase.database().ref('coords');
@@ -44,18 +45,59 @@ class App extends React.Component {
   }
 
   handleUpload(newObject){
-    this.dbRef.set(this.state.coords.concat(newObject),
+    let newCoords = this.state.coords;
+    if(this.state.coords.length > 0){
+      console.log('mayor de 0', this.doesCoordExist(newObject, newCoords))
+      if(this.doesCoordExist(newObject, newCoords)){  
+        newCoords = this.state.coords.map((coord) => {
+          if(coord.lat === newObject.lat && coord.lng === newObject.lng){
+            coord.cases = Number(newObject.cases);
+          }
+          return coord;
+        })
+      }else{
+        newCoords.push(newObject)
+      }
+    }else{
+      newCoords.push(newObject)
+    }
+    console.log(newCoords)
+    this.setState({
+      coords: newCoords
+    })
+    this.dbRef.set(newCoords,
     error => {  })
+  }
+
+  doesCoordExist(coord, listCoords){
+    for(let c of listCoords){
+      if(c.lat === coord.lat && c.lng === coord.lng){
+        return true;
+      }
+    }
+    return false;
   }
 
   handleAuth(){
     const provider = new firebase.auth.GoogleAuthProvider();
 
-    firebase.auth().signInWithPopup(provider);
+    firebase.auth().signInWithPopup(provider)
+      .then((result) => {
+        if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition(position => {
+            this.setState({
+              userCoords: position.coords
+            })
+          })
+        }
+      })
   }
 
   handleLogout(){
     firebase.auth().signOut();
+    this.setState({
+      userCoords: {}
+    })
   }
 
   renderLoginButton(){
@@ -74,7 +116,7 @@ class App extends React.Component {
           <NavMenu />
           {/* <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> */}
 
-          <Route exact path="/" render={()=>{ return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> }} />
+          <Route exact path="/" render={()=>{ return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} userCoords={this.state.userCoords} /> }} />
           {/* <Route path="/news" component={FloatingDiv} />
           <Route path="/timeline" component={FloatingDiv} /> */}
         </Router>
