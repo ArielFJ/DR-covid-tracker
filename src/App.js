@@ -18,7 +18,8 @@ class App extends React.Component {
     super();
     this.state = {
       user: null,
-      coords: []
+      coords: [],
+      //optionSelected: 'home'
     }
 
     this.dbRef = firebase.database().ref('coords');
@@ -26,6 +27,7 @@ class App extends React.Component {
     this.handleAuth = this.handleAuth.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
+    //this.changeOption = this.changeOption.bind(this);
   }
 
   componentDidMount(){
@@ -47,7 +49,6 @@ class App extends React.Component {
   handleUpload(newObject){
     let newCoords = this.state.coords;
     if(this.state.coords.length > 0){
-      console.log('mayor de 0', this.doesCoordExist(newObject, newCoords))
       if(this.doesCoordExist(newObject, newCoords)){  
         newCoords = this.state.coords.map((coord) => {
           if(coord.lat === newObject.lat && coord.lng === newObject.lng){
@@ -61,13 +62,19 @@ class App extends React.Component {
     }else{
       newCoords.push(newObject)
     }
-    console.log(newCoords)
     this.setState({
       coords: newCoords
     })
     this.dbRef.set(newCoords,
     error => {  })
   }
+
+  // changeOption(option){
+  //   console.log(option)
+  //   // this.setState({
+  //   //   optionSelected: option
+  //   // })
+  // }
 
   doesCoordExist(coord, listCoords){
     for(let c of listCoords){
@@ -114,12 +121,11 @@ class App extends React.Component {
       <div className="container-xl full-height ">
         <Router>
           { this.renderLoginButton() }
-          <NavMenu />
-          {/* <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} /> */}
+          <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} />
 
-          <Route exact path="/" render={()=>{ return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} userCoords={this.state.userCoords} /> }} />
-          {/* <Route path="/news" component={FloatingDiv} />
-          <Route path="/timeline" component={FloatingDiv} /> */}
+          <Route exact path="/" render={()=>{ 
+            return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} userCoords={this.state.userCoords} /> }} />
+          
         </Router>
       </div>
     );
