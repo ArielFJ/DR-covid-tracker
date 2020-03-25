@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {Link, Route} from 'react-router-dom';
+import NewsComponent from '../DataComponents/NewsComponent';
 
 
 export class NavMenu extends Component {
@@ -26,9 +27,7 @@ export class NavMenu extends Component {
                 <li className="nav-item">
                     <Link to="/timeline" className={window.location.pathname.endsWith('timeline')? 'nav-link active' : 'nav-link'} id="timeline" onClick={this.onClick} >Covid-19 Timeline</Link>
                 </li>
-                <Route path="/news" render={() =>{
-                    return <h1>Hello</h1>
-                }} />
+                <Route path="/news" component={NewsComponent} />
                 <Route path="/timeline" render={() =>{
                     return <h1>World</h1>
                 }} />
