@@ -9,6 +9,7 @@ export class Map extends Component {
         this.onMapClick = this.onMapClick.bind(this);
         this.setNewMark = this.setNewMark.bind(this);
         this.loadAllMarkers = this.loadAllMarkers.bind(this);
+        this.showUserLocation = this.showUserLocation.bind(this);
 
         this.map = null;
         this.layerGroup = L.layerGroup();
@@ -39,7 +40,9 @@ export class Map extends Component {
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
         this.map.doubleClickZoom.disable();
-        
+        if(this.props.mapProps.user){
+            this.showUserLocation();
+        }
     }
 
     styleFunc() {
@@ -51,6 +54,23 @@ export class Map extends Component {
             marginRight: 'auto',
             marginTop: '1rem',
         }
+    }
+
+    showUserLocation(){
+        let greenIcon = L.icon({
+            iconUrl: 'https://leafletjs.com/examples/custom-icons/leaf-green.png',
+            shadowUrl: 'https://leafletjs.com/examples/custom-icons/leaf-shadow.png',
+        
+            iconSize:     [20, 47], // size of the icon
+            shadowSize:   [18, 40], // size of the shadow
+            iconAnchor:   [12, 54], // point of the icon which will correspond to marker's location
+            shadowAnchor: [0, 47],  // the same for the shadow
+            popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
+        });
+
+        const data = JSON.parse(localStorage.getItem('userCoords'))
+        console.log(data)
+        L.marker(data, {icon: greenIcon}).addTo(this.map).bindPopup('User Location').openPopup();
     }
 
     componentDidUpdate() {
@@ -66,6 +86,9 @@ export class Map extends Component {
                 lng: this.state.coords.lng,
                 cases: this.props.mapProps.cases
             });
+        }
+        if(this.props.mapProps.user){
+            this.showUserLocation();
         }
     }
 

@@ -18,8 +18,7 @@ class App extends React.Component {
     super();
     this.state = {
       user: null,
-      coords: [],
-      userCoords: {}
+      coords: []
     }
 
     this.dbRef = firebase.database().ref('coords');
@@ -42,6 +41,7 @@ class App extends React.Component {
         coords
       })
     })
+    
   }
 
   handleUpload(newObject){
@@ -85,9 +85,11 @@ class App extends React.Component {
       .then((result) => {
         if(navigator.geolocation){
           navigator.geolocation.getCurrentPosition(position => {
-            this.setState({
-              userCoords: position.coords
-            })
+            const obj = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            }
+            localStorage.setItem('userCoords', JSON.stringify(obj))
           })
         }
       })
@@ -95,10 +97,9 @@ class App extends React.Component {
 
   handleLogout(){
     firebase.auth().signOut();
-    this.setState({
-      userCoords: {}
-    })
+    window.location = '/';
   }
+
 
   renderLoginButton(){
     if(this.state.user){

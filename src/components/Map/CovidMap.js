@@ -71,7 +71,8 @@ export class CovidMap extends Component {
             toggleBounds:this.toggleBounds,
             handleUpload:this.props.handleUpload,
             coordinates:this.props.coords,
-            changeCasesInMarker:this.changeCasesInMarker
+            changeCasesInMarker:this.changeCasesInMarker,
+            userCoords: this.props.userCoords
         }
 
         const divProps = {
