@@ -11,6 +11,7 @@ import CovidMap from './components/Map/CovidMap';
 import NavMenu from './components/Menus/NavMenu';
 import NotLoged from './components/Menus/NotLoged';
 import Loged from './components/Menus/Loged';
+import Footer from './components/Footer';
 
 class App extends React.Component {
 
@@ -118,15 +119,22 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container-xl full-height ">
+      <div className="container-xl full-height" style={{minHeight:'57rem'}}>
         <Router>
           { this.renderLoginButton() }
           <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} user={this.state.user} />
 
           <Route exact path="/" render={()=>{ 
-            return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} userCoords={this.state.userCoords} /> }} />
+            return  <CovidMap 
+                        user={this.state.user} 
+                        coords={this.state.coords} 
+                        handleUpload={this.handleUpload} 
+                        userCoords={this.state.userCoords} /> }} />
           
         </Router>
+        <div className="my-auto"></div>
+        <div class="push"></div>
+        <Footer />
       </div>
     );
   }

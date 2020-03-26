@@ -60,7 +60,6 @@ export class CovidMap extends Component {
     }
 
     render() {
-        //console.log(this.props)
         const mapProps = {
             toggleAdding:this.toggleAdding,
             adding:this.state.adding,

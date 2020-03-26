@@ -5,7 +5,7 @@ export class News extends Component {
     styleFunc(){
         return {
             width: "18rem",
-            marginRight: '2rem',
+            marginRight: '4rem',
             marginBottom: '2rem'
         }
     }

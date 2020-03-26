@@ -19,8 +19,6 @@ export class FormCovidCase extends Component {
         this.props.formProps.changeCasesInMarker(1);
     }
 
-    
-
     handleChange(e) {
         this.setState({
             [e.target.name]: e.target.value
