@@ -13,22 +13,13 @@ export class CovidMap extends Component {
             adding: false,
             cases: 0,
             canAddCase: false,
-            isOnBounds: false,
             numberOfCasesInMarker: 1
         }
         this.toggleAdding = this.toggleAdding.bind(this);
         this.changeCase = this.changeCase.bind(this);
         this.toggleCanAdd = this.toggleCanAdd.bind(this);
-        this.toggleBounds = this.toggleBounds.bind(this);
         this.changeCasesInMarker = this.changeCasesInMarker.bind(this);
     }
-
-    toggleBounds(value){
-        this.setState({
-            isOnBounds: value
-        })
-    }
-
 
     toggleAdding(){
         this.setState({
@@ -39,7 +30,7 @@ export class CovidMap extends Component {
     toggleCanAdd(){
         if(!this.state.canAddCase){
             this.setState({
-                newCase: {}
+                newCase: 1
             })
         }
         this.setState({
@@ -67,7 +58,6 @@ export class CovidMap extends Component {
             user:this.props.user,
             canAdd:this.state.canAddCase,
             toggleCanAdd:this.toggleCanAdd, 
-            toggleBounds:this.toggleBounds,
             handleUpload:this.props.handleUpload,
             coordinates:this.props.coords,
             changeCasesInMarker:this.changeCasesInMarker,
@@ -79,8 +69,6 @@ export class CovidMap extends Component {
             changeCase:this.changeCase,
             toggleCanAdd:this.toggleCanAdd,
             user:this.props.user,
-            onBounds:this.state.isOnBounds,
-            toggleBounds:this.toggleBounds,
             numberOfCases:this.state.numberOfCasesInMarker,
             changeCasesInMarker:this.changeCasesInMarker
         }

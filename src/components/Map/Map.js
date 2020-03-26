@@ -137,7 +137,6 @@ export class Map extends Component {
             coords: coord
         })
         this.props.mapProps.changeCasesInMarker(cases)
-        this.props.mapProps.toggleBounds(true)
         this.props.mapProps.toggleAdding()
         this.loadAllMarkers()
     }
@@ -158,17 +157,9 @@ export class Map extends Component {
 
     onMapClick(e) {
         if (this.props.mapProps.user && !this.props.mapProps.adding) {
-            if (e.latlng.lng > this.limits.west &&
-                e.latlng.lng < this.limits.east &&
-                e.latlng.lat > this.limits.south &&
-                e.latlng.lat < this.limits.north) {
-                this.setState({
-                    coords: e.latlng
-                })                
-                this.props.mapProps.toggleBounds(true);
-            }else{
-                this.props.mapProps.toggleBounds(false);
-            }
+            this.setState({
+                coords: e.latlng
+            })                
         } 
         this.props.mapProps.toggleAdding();
     }

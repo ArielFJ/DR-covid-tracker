@@ -24,25 +24,20 @@ export class FloatingDiv extends Component {
     }
 
     handleCancel() {
-        this.props.divProps.changeCase({});
-        this.props.divProps.toggleBounds(false);
+        this.props.divProps.changeCase(1);
         this.props.divProps.toggleAdding();
     }
 
     renderInnerElement(){
         if(this.props.divProps.user){
-            if(this.props.divProps.onBounds){
-                const formProps = {
-                    changeCase:this.props.divProps.changeCase,
-                    toggleCanAdd:this.props.divProps.toggleCanAdd,
-                    toggleAdding:this.props.divProps.toggleAdding,
-                    numberOfCases:this.props.divProps.numberOfCases,
-                    changeCasesInMarker:this.props.divProps.changeCasesInMarker
-                }
-                return <FormCovidCase formProps={formProps}  />
-            }else{
-                return <MessageDiv title="Out of bounds" message="Please, limit the marks to Dominican Republic." />
+            const formProps = {
+                changeCase:this.props.divProps.changeCase,
+                toggleCanAdd:this.props.divProps.toggleCanAdd,
+                toggleAdding:this.props.divProps.toggleAdding,
+                numberOfCases:this.props.divProps.numberOfCases,
+                changeCasesInMarker:this.props.divProps.changeCasesInMarker
             }
+            return <FormCovidCase formProps={formProps}  />
         }else{
             return <MessageDiv title="No user" message="You have to log in to make marks on the map." />
         }
