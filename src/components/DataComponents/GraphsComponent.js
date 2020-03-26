@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 
 import Graph from './Graph';
 import Loader from '../SpinKit/Loader';
+import MessageDiv from '../FloatingDivs/MessageDiv';
 
 export class GraphsComponent extends Component {
 
@@ -69,7 +70,12 @@ export class GraphsComponent extends Component {
                     </div>
             }
         }else{
-            return <h1 className="display-4">You have to log in to see timeline.</h1>
+            return <div style={{
+                minHeight:'45rem',
+                paddingTop:'15rem'
+                }}>
+            <h1 className="display-4 ">You have to log in to see timeline.</h1>
+        </div>
         }
     }
 

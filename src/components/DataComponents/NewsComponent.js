@@ -52,7 +52,12 @@ export class NewsComponent extends Component {
                         </div>
             }
         } else{
-            return <h1 className="display-4">You have to log in to see last news.</h1>
+            return <div style={{
+                minHeight:'45rem',
+                paddingTop:'15rem'
+                }}>
+            <h1 className="display-4 ">You have to log in to see last news.</h1>
+        </div>
         }
     }
 
