@@ -8,8 +8,9 @@ export class Map extends Component {
         this.styleFunc = this.styleFunc.bind(this);
         this.onMapClick = this.onMapClick.bind(this);
         this.setNewMark = this.setNewMark.bind(this);
-        this.loadAllMarkers = this.loadAllMarkers.bind(this);
+        this.loadAllUserMarkers = this.loadAllUserMarkers.bind(this);
         this.showUserLocation = this.showUserLocation.bind(this);
+        this.loadAllCasesMarkers = this.loadAllCasesMarkers.bind(this);
 
         this.map = null;
         this.layerGroup = L.layerGroup();
@@ -41,6 +42,7 @@ export class Map extends Component {
         }).addTo(this.map);
         this.map.doubleClickZoom.disable();
         if(this.props.mapProps.user){
+            this.loadAllCasesMarkers();
             this.showUserLocation();
         }
     }
@@ -66,6 +68,13 @@ export class Map extends Component {
 
         const data = JSON.parse(localStorage.getItem('userCoords'))
         L.marker(data, {icon: greenIcon}).addTo(this.map).bindPopup('User Location');
+    }
+
+    loadAllCasesMarkers(){
+        console.log('cargando')
+        fetch('https://covid19.mathdro.id/api/confirmed')
+            .then(res => res.json())
+            .then(data => console.log(data));
     }
 
     componentDidUpdate() {
@@ -100,7 +109,7 @@ export class Map extends Component {
         }
     }
 
-    createPopupInnerData(label, data) {
+    createPopupInnerData(label, data, isUser) {
         var div = document.createElement('div');
         var btn = document.createElement('button');
         var inputLat = document.createElement('input');
@@ -120,8 +129,10 @@ export class Map extends Component {
             this.getMarkData(btn);
         }
         div.appendChild(document.createTextNode(`Cases: ${data.cases}`));
-        div.appendChild(document.createElement('br'));
-        div.appendChild(btn);
+        if(isUser){
+            div.appendChild(document.createElement('br'));
+            div.appendChild(btn);
+        }
         div.appendChild(inputLng);
         div.appendChild(inputLat);
         return div;
@@ -138,10 +149,10 @@ export class Map extends Component {
         })
         this.props.mapProps.changeCasesInMarker(cases)
         this.props.mapProps.toggleAdding()
-        this.loadAllMarkers()
+        this.loadAllUserMarkers()
     }
 
-    loadAllMarkers(){
+    loadAllUserMarkers(){
         this.layerGroup.clearLayers();
         this.props.mapProps.coordinates.forEach(coord => {
             let {lat, lng, cases} = coord;
@@ -167,7 +178,7 @@ export class Map extends Component {
 
     render() {
         if(this.props.mapProps.user){
-            this.loadAllMarkers()
+            this.loadAllUserMarkers()
         }
         return (
             <div id="map" style={this.styleFunc()}>
