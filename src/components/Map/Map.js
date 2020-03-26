@@ -29,8 +29,13 @@ export class Map extends Component {
 
 
     componentDidMount() {
+<<<<<<< HEAD
+        const coord = JSON.parse(localStorage.getItem('userCoords'))
+        this.map = new L.Map("map").setView([coord.lat, coord.lng], 8);
+=======
         const coord = [0, 0]
         this.map = new L.Map("map").setView(coord, 3);
+>>>>>>> dr-map-to-world-map
         this.layerGroup.addTo(this.map);
         this.map.on('contextmenu', this.onMapClick);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
