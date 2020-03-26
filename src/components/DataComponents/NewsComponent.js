@@ -14,8 +14,6 @@ export class NewsComponent extends Component {
     }
 
     componentDidMount(){
-        // let res = await fetch('https://thevirustracker.com/free-api?countryTotal=DO');
-        // let data = await res.json();
         fetch('https://thevirustracker.com/free-api?countryTotal=DO')
             .then(result => result.json())
             .then(data => {

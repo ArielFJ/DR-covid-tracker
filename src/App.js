@@ -125,7 +125,11 @@ class App extends React.Component {
           <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} user={this.state.user} />
 
           <Route exact path="/" render={()=>{ 
-            return  <CovidMap user={this.state.user} coords={this.state.coords} handleUpload={this.handleUpload} userCoords={this.state.userCoords} /> }} />
+            return  <CovidMap 
+                        user={this.state.user} 
+                        coords={this.state.coords} 
+                        handleUpload={this.handleUpload} 
+                        userCoords={this.state.userCoords} /> }} />
           
         </Router>
         <div className="my-auto"></div>

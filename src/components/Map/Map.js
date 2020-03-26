@@ -69,7 +69,6 @@ export class Map extends Component {
     }
 
     componentDidUpdate() {
-        //console.log('stateMap', this.state);
         if (this.props.mapProps.canAdd) {
             this.setNewMark({
                 coords: this.state.coords,
@@ -88,7 +87,6 @@ export class Map extends Component {
     }
 
     setNewMark(data, open){
-        //console.log(data) // no se está enviando coord al editar 
         let marker = L.marker(data.coords, L.divIcon({className: 'my-div-icon'})).addTo(this.layerGroup);
 
         let div = this.createPopupInnerData('Edit', {
