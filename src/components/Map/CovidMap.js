@@ -4,6 +4,7 @@ import React, { Component, Fragment } from 'react'
 import Map from './Map';
 import CovidStats from '../DataComponents/CovidStats';
 import FloatingDiv from '../FloatingDivs/FloatingDiv';
+import DivInfoMap from '../DataComponents/DivInfoMap';
 
 export class CovidMap extends Component {
 
@@ -75,6 +76,7 @@ export class CovidMap extends Component {
 
         return (
             <Fragment>
+                <DivInfoMap />
                 <Map mapProps={mapProps}/>
                 <CovidStats />
                 {this.state.adding && <FloatingDiv divProps={divProps} />}

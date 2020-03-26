@@ -31,8 +31,6 @@ export class CovidStats extends Component {
                             });    
                             return <li key={i} className="list-group-item list-group-item-info">{title.map(word => word)}: {this.state.info[key]}</li>
                         }
-                        // console.log(key)
-                        // return <li key={i} >{i}</li>
                     })
                 }
                 </ul>
