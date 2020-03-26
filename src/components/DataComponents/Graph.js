@@ -31,9 +31,6 @@ export default class Graph extends Component {
                     }
                 ],
                 
-            },
-            options: {
-                //Customize chart options
             }
         });
     }
@@ -44,7 +41,7 @@ export default class Graph extends Component {
 
     styleFunc = () => {
         return {
-            width: '70rem',
+            width: '65rem',
             marginLeft: 'auto',
             marginRight: 'auto'
         }

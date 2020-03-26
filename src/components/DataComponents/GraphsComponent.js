@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Graph from './Graph';
 import Loader from '../SpinKit/Loader';
-import MessageDiv from '../FloatingDivs/MessageDiv';
 
 export class GraphsComponent extends Component {
 
