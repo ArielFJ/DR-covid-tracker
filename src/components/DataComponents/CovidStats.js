@@ -7,10 +7,10 @@ export class CovidStats extends Component {
     }
 
     async componentDidMount(){
-        let res = await fetch('https://thevirustracker.com/free-api?countryTotal=DO');
+        let res = await fetch('https://thevirustracker.com/free-api?global=stats');
         let data = await res.json();
         this.setState({
-            info: data.countrydata[0]
+            info: data.results[0]
         })
     }
 
@@ -21,7 +21,7 @@ export class CovidStats extends Component {
                 <ul className="list-group">
                 {   Object.keys(this.state.info).length > 0 &&
                     Object.keys(this.state.info).map((key,i) => {
-                        if(key !== 'info'){
+                        if(key !== 'source'){
                             const words = key.split('_');
                             const title = words.map((word, i) => {
                                 if(i === 0){

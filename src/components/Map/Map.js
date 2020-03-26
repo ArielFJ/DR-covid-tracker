@@ -8,14 +8,16 @@ export class Map extends Component {
         this.styleFunc = this.styleFunc.bind(this);
         this.onMapClick = this.onMapClick.bind(this);
         this.setNewMark = this.setNewMark.bind(this);
-        this.loadAllMarkers = this.loadAllMarkers.bind(this);
+        this.loadAllUserMarkers = this.loadAllUserMarkers.bind(this);
         this.showUserLocation = this.showUserLocation.bind(this);
+        this.loadMarkers = this.loadMarkers.bind(this);
 
         this.map = null;
         this.layerGroup = L.layerGroup();
         this.popup = new L.popup();
         this.state = {
-            coords: {}
+            coords: {},
+            isOnUserLocation: false
         }
         this.limits = {
             north: 19.97,
@@ -27,10 +29,15 @@ export class Map extends Component {
 
 
     componentDidMount() {
+<<<<<<< HEAD
         const coord = JSON.parse(localStorage.getItem('userCoords'))
         this.map = new L.Map("map").setView([coord.lat, coord.lng], 8);
+=======
+        const coord = [0, 0]
+        this.map = new L.Map("map").setView(coord, 3);
+>>>>>>> dr-map-to-world-map
         this.layerGroup.addTo(this.map);
-        this.map.on('click', this.onMapClick);
+        this.map.on('contextmenu', this.onMapClick);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
             attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
             maxZoom: 18,
@@ -39,8 +46,10 @@ export class Map extends Component {
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
-        this.map.doubleClickZoom.disable();
+        // this.map.doubleClickZoom.disable();
         if(this.props.mapProps.user){
+            this.map.setView(JSON.parse(localStorage.getItem('userCoords')));
+            this.loadMarkers();
             this.showUserLocation();
         }
     }
@@ -65,7 +74,23 @@ export class Map extends Component {
         });
 
         const data = JSON.parse(localStorage.getItem('userCoords'))
-        L.marker(data, {icon: greenIcon}).addTo(this.map).bindPopup('User Location');
+        L.marker(data, {icon: greenIcon}).addTo(this.layerGroup).bindPopup('User Location');
+    }
+
+    async loadMarkers(){
+        let res = await fetch('https://covid19.mathdro.id/api/confirmed')
+        let data = await res.json();
+        data.forEach(x => {
+            const dat = {
+                coords: {lat:x.lat, lng:x.long},
+                confirmed: x.confirmed,
+                active: x.active,
+                deaths: x.deaths,
+                recovered: x.recovered
+            }
+            this.setNewMark(dat, false, false);    
+        })
+        
     }
 
     componentDidUpdate() {
@@ -73,7 +98,7 @@ export class Map extends Component {
             this.setNewMark({
                 coords: this.state.coords,
                 cases: this.props.mapProps.cases
-            }, true)
+            }, true, true)
             this.props.mapProps.toggleCanAdd();
             this.props.mapProps.handleUpload({
                 lat: this.state.coords.lat,
@@ -82,17 +107,41 @@ export class Map extends Component {
             });
         }
         if(this.props.mapProps.user){
+            if(!this.state.isOnUserLocation){
+                this.map.setView(JSON.parse(localStorage.getItem('userCoords')), 6);
+                this.setState({
+                    isOnUserLocation: true
+                })
+            }
             this.showUserLocation();
+            this.loadMarkers();
         }
     }
 
-    setNewMark(data, open){
-        let marker = L.marker(data.coords, L.divIcon({className: 'my-div-icon'})).addTo(this.layerGroup);
+    setNewMark(data, open, isUser, icon='my-div-icon'){
+        let marker
+        if(isUser){
+            marker = L.marker(data.coords, L.divIcon({className: icon})).addTo(this.layerGroup);
+        }else{
+            marker = L.circle(data.coords, {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5,
+                radius: 15000
+            }).addTo(this.layerGroup);
+        }
 
-        let div = this.createPopupInnerData('Edit', {
-            lat: data.coords.lat,
-            lng: data.coords.lng,
-            cases:data.cases});
+        let dat = {}
+        if(isUser){
+            dat = {
+                lat: data.coords.lat,
+                lng: data.coords.lng,
+                cases:data.cases
+            };
+        }else{
+            dat = data;
+        }
+        let div = this.createPopupInnerData('Edit', dat, isUser);
         marker.bindPopup(div);
 
         if(open){
@@ -100,30 +149,43 @@ export class Map extends Component {
         }
     }
 
-    createPopupInnerData(label, data) {
+    createPopupInnerData(label, data, isUser) {
         var div = document.createElement('div');
-        var btn = document.createElement('button');
-        var inputLat = document.createElement('input');
-        inputLat.type = 'hidden';
-        inputLat.name = 'lat';
+        
+        if(isUser){
+            var btn = document.createElement('button');
+            var inputLat = document.createElement('input');
+            inputLat.type = 'hidden';
+            inputLat.name = 'lat';
 
-        var inputLng = document.createElement('input');
-        inputLng.type = 'hidden';
-        inputLng.name = 'lng';
+            var inputLng = document.createElement('input');
+            inputLng.type = 'hidden';
+            inputLng.name = 'lng';
 
-        inputLat.value = data.lat;
-        inputLng.value = data.lng;
+            inputLat.value = data.lat;
+            inputLng.value = data.lng;
 
-        btn.classList = 'btn btn-primary';
-        btn.innerHTML = label;
-        btn.onclick = () => {
-            this.getMarkData(btn);
+            btn.classList = 'btn btn-primary';
+            btn.innerHTML = label;
+            btn.onclick = () => {
+                this.getMarkData(btn);
+            }
+            div.appendChild(document.createTextNode(`Cases: ${data.cases}`));
+            div.appendChild(document.createElement('br'));
+            div.appendChild(btn);
+            div.appendChild(inputLng);
+            div.appendChild(inputLat);
         }
-        div.appendChild(document.createTextNode(`Cases: ${data.cases}`));
-        div.appendChild(document.createElement('br'));
-        div.appendChild(btn);
-        div.appendChild(inputLng);
-        div.appendChild(inputLat);
+        else{
+            div.appendChild(document.createTextNode(`Cases Confirmed: ${data.confirmed}`))
+            div.appendChild(document.createElement('br'));
+            div.appendChild(document.createTextNode(`Cases Recovered: ${data.recovered}`))
+            div.appendChild(document.createElement('br'));
+            div.appendChild(document.createTextNode(`Deaths: ${data.deaths}`))
+            div.appendChild(document.createElement('br'));
+            div.appendChild(document.createTextNode(`Active Cases: ${data.active}`))
+            div.appendChild(document.createElement('br'));
+        }        
         return div;
     }
 
@@ -137,12 +199,11 @@ export class Map extends Component {
             coords: coord
         })
         this.props.mapProps.changeCasesInMarker(cases)
-        this.props.mapProps.toggleBounds(true)
         this.props.mapProps.toggleAdding()
-        this.loadAllMarkers()
+        this.loadAllUserMarkers()
     }
 
-    loadAllMarkers(){
+    loadAllUserMarkers(){
         this.layerGroup.clearLayers();
         this.props.mapProps.coordinates.forEach(coord => {
             let {lat, lng, cases} = coord;
@@ -152,23 +213,15 @@ export class Map extends Component {
                     lng
                 },
                 cases
-            }, false)
+            }, false, true)
         });
     }
 
     onMapClick(e) {
         if (this.props.mapProps.user && !this.props.mapProps.adding) {
-            if (e.latlng.lng > this.limits.west &&
-                e.latlng.lng < this.limits.east &&
-                e.latlng.lat > this.limits.south &&
-                e.latlng.lat < this.limits.north) {
-                this.setState({
-                    coords: e.latlng
-                })                
-                this.props.mapProps.toggleBounds(true);
-            }else{
-                this.props.mapProps.toggleBounds(false);
-            }
+            this.setState({
+                coords: e.latlng
+            })                
         } 
         this.props.mapProps.toggleAdding();
     }
@@ -176,7 +229,7 @@ export class Map extends Component {
 
     render() {
         if(this.props.mapProps.user){
-            this.loadAllMarkers()
+            this.loadAllUserMarkers()
         }
         return (
             <div id="map" style={this.styleFunc()}>
