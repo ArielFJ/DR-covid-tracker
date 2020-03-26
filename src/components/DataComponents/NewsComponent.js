@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import News from './News';
 
+import Loader from '../SpinKit/Loader';
+
 export class NewsComponent extends Component {
 
     constructor(){
@@ -33,7 +35,7 @@ export class NewsComponent extends Component {
                 let counter = 0;
                 for(let n of Object.keys(this.state.news).reverse()){
                     if(counter % 3 === 0){
-                        divs.push(<div className="row ml-4" style={{width:'100%'}}>{news}</div>);
+                        divs.push(<div className="row ml-5" style={{width:'100%'}}>{news}</div>);
                         news = [];
                         counter = 0;
                     }
@@ -45,7 +47,9 @@ export class NewsComponent extends Component {
                 console.log(divs)
                 return divs;
             }else{
-                return <h1 className="display-4" >Loading...</h1>
+                return <div className="text-center" style={{marginTop:'10rem'}}>
+                            <Loader />
+                        </div>
             }
         } else{
             return <h1 className="display-4">You have to log in to see last news.</h1>
