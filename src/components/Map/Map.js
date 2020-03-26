@@ -27,8 +27,8 @@ export class Map extends Component {
 
 
     componentDidMount() {
-        const coord = [18.4718609, -69.8923187]
-        this.map = new L.Map("map").setView(coord, 8);
+        const coord = JSON.parse(localStorage.getItem('userCoords'))
+        this.map = new L.Map("map").setView([coord.lat, coord.lng], 8);
         this.layerGroup.addTo(this.map);
         this.map.on('click', this.onMapClick);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {

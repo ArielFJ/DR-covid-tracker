@@ -133,7 +133,6 @@ class App extends React.Component {
           
         </Router>
         <div className="my-auto"></div>
-        <div class="push"></div>
         <Footer />
       </div>
     );
