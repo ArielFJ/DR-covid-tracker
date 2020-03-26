@@ -65,7 +65,7 @@ export class Map extends Component {
         });
 
         const data = JSON.parse(localStorage.getItem('userCoords'))
-        L.marker(data, {icon: greenIcon}).addTo(this.map).bindPopup('User Location').openPopup();
+        L.marker(data, {icon: greenIcon}).addTo(this.map).bindPopup('User Location');
     }
 
     componentDidUpdate() {
