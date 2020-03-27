@@ -31,6 +31,11 @@ export class Map extends Component {
     componentDidMount() {
         const coord = [0, 0]
         this.map = new L.Map("map").setView(coord, 3);
+        let southWest = L.latLng(-84.92909765074076, -171.91214186037487),
+            northEast = L.latLng( 84.92132367178613, 192.11040404485885),
+            bounds = L.latLngBounds(southWest, northEast);
+        this.map.setMinZoom(2);
+        this.map.setMaxBounds(bounds);
         this.layerGroup.addTo(this.map);
         this.map.on('contextmenu', this.onMapClick);
         L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
@@ -41,7 +46,13 @@ export class Map extends Component {
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
+
+        this.map.on('click', (e) => {
+            console.log(e.latlng)
+        })
+
         //this.map.doubleClickZoom.disable();
+        
         if(this.props.mapProps.user){            
             if(this.props.mapProps.userCoords){
                 this.showUserLocation();
@@ -99,6 +110,7 @@ export class Map extends Component {
     }
 
     componentDidUpdate() {
+        console.log(this.map.getZoom())
         if (this.props.mapProps.canAdd) {
             this.setNewMark({
                 coords: this.state.coords,
