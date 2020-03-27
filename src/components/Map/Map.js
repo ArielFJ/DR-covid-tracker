@@ -41,11 +41,13 @@ export class Map extends Component {
             zoomOffset: -1,
             accessToken: 'pk.eyJ1IjoiYWZlcm1pbiIsImEiOiJjazg0bzhwOXgxb2RuM2tvNGhzemF3dmpjIn0.qq9jjJSvtG4ps2zkiJ22lg'
         }).addTo(this.map);
-        // this.map.doubleClickZoom.disable();
-        if(this.props.mapProps.user){
-            this.map.setView(JSON.parse(localStorage.getItem('userCoords')));
+        //this.map.doubleClickZoom.disable();
+        if(this.props.mapProps.user){            
+            if(this.props.mapProps.userCoords){
+                this.showUserLocation();
+                this.map.setView(this.props.mapProps.userCoords);
+            }
             this.loadMarkers();
-            this.showUserLocation();
         }
     }
 
@@ -67,9 +69,17 @@ export class Map extends Component {
             iconAnchor:   [12, 54], // point of the icon which will correspond to marker's location            
             popupAnchor:  [-3, -46] // point from which the popup should open relative to the iconAnchor
         });
+        
+        const data = this.props.mapProps.userCoords;
+        // console.log(data)
+        // L.circle(data, {
+        //     color: 'green',
+        //     fillColor: '#f03',
+        //     fillOpacity: 0.5,
+        //     radius: 15000
+        // }).addTo(this.map).bindPopup('User Location');
 
-        const data = JSON.parse(localStorage.getItem('userCoords'))
-        L.marker(data, {icon: greenIcon}).addTo(this.layerGroup).bindPopup('User Location');
+        L.marker(data, {icon: greenIcon}).addTo(this.map).bindPopup('User Location');
     }
 
     async loadMarkers(){
@@ -103,12 +113,14 @@ export class Map extends Component {
         }
         if(this.props.mapProps.user){
             if(!this.state.isOnUserLocation){
-                this.map.setView(JSON.parse(localStorage.getItem('userCoords')), 6);
-                this.setState({
-                    isOnUserLocation: true
-                })
+                if(this.props.mapProps.userCoords){                    
+                    this.showUserLocation();
+                    this.map.setView(this.props.mapProps.userCoords, 6);
+                    this.setState({
+                        isOnUserLocation: true
+                    })                
+                }
             }
-            this.showUserLocation();
             this.loadMarkers();
         }
     }

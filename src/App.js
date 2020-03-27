@@ -20,7 +20,7 @@ class App extends React.Component {
     this.state = {
       user: null,
       coords: [],
-      //optionSelected: 'home'
+      userCoords: {}
     }
 
     this.dbRef = firebase.database().ref('coords');
@@ -28,10 +28,22 @@ class App extends React.Component {
     this.handleAuth = this.handleAuth.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
-    //this.changeOption = this.changeOption.bind(this);
   }
 
   componentDidMount(){
+
+    if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(position => {
+          const obj = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          }
+          this.setState({
+              userCoords: obj
+          })
+        })
+      }
+
     firebase.auth().onAuthStateChanged(user => {
       this.setState({
         user
@@ -70,13 +82,6 @@ class App extends React.Component {
     error => {  })
   }
 
-  // changeOption(option){
-  //   console.log(option)
-  //   // this.setState({
-  //   //   optionSelected: option
-  //   // })
-  // }
-
   doesCoordExist(coord, listCoords){
     for(let c of listCoords){
       if(c.lat === coord.lat && c.lng === coord.lng){
@@ -90,17 +95,20 @@ class App extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
 
     firebase.auth().signInWithPopup(provider)
-      .then((result) => {
-        if(navigator.geolocation){
-          navigator.geolocation.getCurrentPosition(position => {
-            const obj = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            }
-            localStorage.setItem('userCoords', JSON.stringify(obj))
-          })
-        }
-      })
+    //   .then((result) => {
+    //     if(navigator.geolocation){
+    //       navigator.geolocation.getCurrentPosition(position => {
+    //         const obj = {
+    //           lat: position.coords.latitude,
+    //           lng: position.coords.longitude
+    //         }
+    //         this.setState({
+    //             userCoords: obj
+    //         })
+    //       })
+    //     }
+    //   })
+    //   this.forceUpdate();
   }
 
   handleLogout(){
