@@ -7,7 +7,6 @@ export default class Graph extends Component {
     
     componentDidMount() {
         const myChartRef = this.chartRef.current.getContext("2d");
-        console.log(this.props);
         new Chart(myChartRef, {
             type: "line",
             data: {
@@ -25,23 +24,6 @@ export default class Graph extends Component {
                         borderColor: 'rgb(191, 10, 10)'
                     },
                 ]
-                // ],options: {
-                //     title: {
-                //       display: true,
-                //       text: 'World population per region (in millions)'
-                //     },
-                //     scales: {
-                //         yAxes: [{
-                //             display: true,
-                //             ticks: {                
-                //                 beginAtZero: true,   // minimum value will be 0.
-                //                 steps: 10000,
-                //                 stepValue: 5000,
-                //                 max: 10000000
-                //             }
-                //         }]
-                //     }
-                //   }
                 
             }
         });

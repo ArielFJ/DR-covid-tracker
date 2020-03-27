@@ -36,9 +36,7 @@ export class GraphsComponent extends Component {
 
     renderGraphs = () => {
         let dataset = this.state;
-        console.log(dataset)
         if(this.props.user){
-            console.log('dataset3   ')
             if(dataset.dates.length > 0){
                 let datasetLast3 = {
                     dates: dataset.dates.slice(-3),
