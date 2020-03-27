@@ -76,7 +76,7 @@ export class CovidMap extends Component {
 
         return (
             <Fragment>
-                <DivInfoMap />
+                { this.props.user ? <DivInfoMap /> : <h3 className=" text-center">You have to login to interact with the map</h3>}
                 <Map mapProps={mapProps}/>
                 <CovidStats />
                 {this.state.adding && <FloatingDiv divProps={divProps} />}

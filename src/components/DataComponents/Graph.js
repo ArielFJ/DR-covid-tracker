@@ -12,31 +12,39 @@ export default class Graph extends Component {
             type: "line",
             data: {
                 //Bring in data
-                labels: this.props.quantity ? this.getLastElements(this.props.labels, this.props.quantity) : this.props.labels,
+                labels: this.props.data.dates,
                 datasets: [
                     {
                         label: "Number of cases",
-                        data: this.props.quantity ? this.getLastElements(this.props.data.totalCases, this.props.quantity) : this.props.data.totalCases ,
+                        data: this.props.data.totalCases ,
                         borderColor: 'rgb(0, 145, 255)'
                     },
                     {
                         label: "Number of deaths",
-                        data: this.props.quantity ? this.getLastElements(this.props.data.totalDeaths, this.props.quantity) : this.props.data.totalDeaths ,
+                        data: this.props.data.totalDeaths ,
                         borderColor: 'rgb(191, 10, 10)'
                     },
-                    {
-                        label: "Number of person recoveries",
-                        data: this.props.quantity ? this.getLastElements(this.props.data.totalRecoveries, this.props.quantity) : this.props.data.totalRecoveries,
-                        borderColor: 'rgb(66, 158, 38)'
-                    }
-                ],
+                ]
+                // ],options: {
+                //     title: {
+                //       display: true,
+                //       text: 'World population per region (in millions)'
+                //     },
+                //     scales: {
+                //         yAxes: [{
+                //             display: true,
+                //             ticks: {                
+                //                 beginAtZero: true,   // minimum value will be 0.
+                //                 steps: 10000,
+                //                 stepValue: 5000,
+                //                 max: 10000000
+                //             }
+                //         }]
+                //     }
+                //   }
                 
             }
         });
-    }
-
-    getLastElements = (list, number) => {
-        return list.slice(-number);
     }
 
     styleFunc = () => {
