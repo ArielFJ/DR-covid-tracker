@@ -1,3 +1,8 @@
+## Covid Tracker
+
+This app lets you follow the changes on the covid in Dominican Republic. The program let user add cases on the map and visualize other cases that other users have added.
+<hr />
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
