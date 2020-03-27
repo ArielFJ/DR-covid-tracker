@@ -16,7 +16,7 @@ export class FloatingDiv extends Component {
             width: '48%',
             height: '25rem',
             position: "absolute",
-            top: '17.5%',
+            top: '25.5%',
             left: '26%',
             zIndex:'1000',
             color: 'white',

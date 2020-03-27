@@ -7,60 +7,56 @@ export class GraphsComponent extends Component {
 
     
     state = {
-        data: {}
+        dates: [],
+        totalCases: [],
+        totalDeaths: [],
     }
 
     async componentDidMount(){
-        const res = await fetch('https://thevirustracker.com/free-api?countryTimeline=DO');
+        const res = await fetch('https://covid19.mathdro.id/api/daily');
         const data = await res.json();
-        this.setState({
-            data: data.timelineitems[0]
-        });
-    }
-
-    getData = () => {
+        
         let dates = [];
         let totalCases = [];
         let totalDeaths = [];
-        let totalRecoveries = [];
 
-        Object.keys(this.state.data).forEach(date => {
-            if(date !== 'stat'){
-                const month = Number(date.split('/')[0]); 
-                const year = Number(date.split('/')[2]);
-                if(year >= 2020){
-                    if((month >= 3 && year === 2020) || year > 2020){
-                        dates.push(date);
-                        totalCases.push(this.state.data[date].total_cases);
-                        totalDeaths.push(this.state.data[date].total_deaths);
-                        totalRecoveries.push(this.state.data[date].total_recoveries);
-                    }
-                }
-            }
-        })
-
-        return {
-            totalCases: totalCases,
-            totalDeaths: totalDeaths,
-            totalRecoveries: totalRecoveries,
-            dates: dates
+        for(let item of data){
+            dates.push(item.reportDate);
+            totalCases.push(item.totalConfirmed);
+            totalDeaths.push(item.deaths.total);
         }
+
+        this.setState({
+            dates,
+            totalCases,
+            totalDeaths          
+        })
     }
 
 
     renderGraphs = () => {
-        let dataset = this.getData()
+        let dataset = this.state;
         if(this.props.user){
-
             if(dataset.dates.length > 0){
+                let datasetLast3 = {
+                    dates: dataset.dates.slice(-3),
+                    totalCases: dataset.totalCases.slice(-3),
+                    totalDeaths: dataset.totalDeaths.slice(-3)
+                }
+
+                let datasetLastWeek ={
+                    dates: dataset.dates.slice(-7),
+                    totalCases: dataset.totalCases.slice(-7),
+                    totalDeaths: dataset.totalDeaths.slice(-7)
+                }
                 return (
                     <div className="text-center">                    
-                        <h1 className="display-4">Number of cases after first infected</h1>
-                        <Graph labels={dataset.dates} data={dataset} />
-                        <h1 className="display-4">Number of cases in last 3 days</h1>
-                        <Graph labels={dataset.dates} data={dataset} quantity={3} />
-                        <h1 className="display-4">Number of cases in the last week</h1>
-                        <Graph labels={dataset.dates} data={dataset} quantity={7}/>
+                        <h1 className="display-4">Approximate cases in last 2 months</h1>
+                        <Graph  data={dataset} />
+                        <h1 className="display-4">Approximate cases in last 3 days</h1>
+                        <Graph data={datasetLast3}/>
+                        <h1 className="display-4">Approximate cases in the last week</h1>
+                        <Graph data={datasetLastWeek} />
                     </div>
             )
             }else{

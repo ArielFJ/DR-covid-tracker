@@ -7,36 +7,26 @@ export default class Graph extends Component {
     
     componentDidMount() {
         const myChartRef = this.chartRef.current.getContext("2d");
-        console.log(this.props);
         new Chart(myChartRef, {
             type: "line",
             data: {
                 //Bring in data
-                labels: this.props.quantity ? this.getLastElements(this.props.labels, this.props.quantity) : this.props.labels,
+                labels: this.props.data.dates,
                 datasets: [
                     {
                         label: "Number of cases",
-                        data: this.props.quantity ? this.getLastElements(this.props.data.totalCases, this.props.quantity) : this.props.data.totalCases ,
+                        data: this.props.data.totalCases ,
                         borderColor: 'rgb(0, 145, 255)'
                     },
                     {
                         label: "Number of deaths",
-                        data: this.props.quantity ? this.getLastElements(this.props.data.totalDeaths, this.props.quantity) : this.props.data.totalDeaths ,
+                        data: this.props.data.totalDeaths ,
                         borderColor: 'rgb(191, 10, 10)'
                     },
-                    {
-                        label: "Number of person recoveries",
-                        data: this.props.quantity ? this.getLastElements(this.props.data.totalRecoveries, this.props.quantity) : this.props.data.totalRecoveries,
-                        borderColor: 'rgb(66, 158, 38)'
-                    }
-                ],
+                ]
                 
             }
         });
-    }
-
-    getLastElements = (list, number) => {
-        return list.slice(-number);
     }
 
     styleFunc = () => {

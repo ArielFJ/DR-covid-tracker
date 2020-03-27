@@ -9,8 +9,11 @@
     "chart.js": "^2.9.3",
     "firebase": "^7.12.0",
     "leaflet": "^1.6.0",
+    "morris.js": "^0.5.0",
+    "raphael": "^2.3.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-google-charts": "^3.0.15",
     "react-leaflet": "^2.6.3",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1"
