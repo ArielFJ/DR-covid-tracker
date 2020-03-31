@@ -41,10 +41,17 @@ class App extends React.Component {
           this.setState({
               userCoords: obj
           })
+        }, error => {
+            if(error.code === error.PERMISSION_DENIED){
+                this.setState({
+                    userCoords: null
+                })
+            }
         })
       }
 
     firebase.auth().onAuthStateChanged(user => {
+    
       this.setState({
         user
       })
@@ -95,19 +102,20 @@ class App extends React.Component {
     const provider = new firebase.auth.GoogleAuthProvider();
 
     firebase.auth().signInWithPopup(provider)
-    //   .then((result) => {
-    //     if(navigator.geolocation){
-    //       navigator.geolocation.getCurrentPosition(position => {
-    //         const obj = {
-    //           lat: position.coords.latitude,
-    //           lng: position.coords.longitude
-    //         }
-    //         this.setState({
-    //             userCoords: obj
-    //         })
-    //       })
-    //     }
-    //   })
+      .then((result) => {
+        // if(navigator.geolocation){
+        //   navigator.geolocation.getCurrentPosition(position => {
+        //     const obj = {
+        //       lat: position.coords.latitude,
+        //       lng: position.coords.longitude
+        //     }
+        //     this.setState({
+        //         userCoords: obj
+        //     })
+        //   })
+        // }
+        console.log(result.user.email + 'ha iniciado sesión')
+      })
     //   this.forceUpdate();
   }
 
