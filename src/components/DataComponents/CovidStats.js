@@ -7,7 +7,7 @@ export class CovidStats extends Component {
     }
 
     async componentDidMount(){
-        let res = await fetch('https://thevirustracker.com/free-api?global=stats');
+        let res = await fetch('https://cors-anywhere.herokuapp.com/https://thevirustracker.com/free-api?global=stats');
         let data = await res.json();
         this.setState({
             info: data.results[0]
