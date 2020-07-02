@@ -12,6 +12,7 @@ import NavMenu from './components/Menus/NavMenu';
 import NotLoged from './components/Menus/NotLoged';
 import Loged from './components/Menus/Loged';
 import Footer from './components/Footer';
+import ChatBot from './components/ChatBot'
 
 class App extends React.Component {
 
@@ -103,20 +104,8 @@ class App extends React.Component {
 
     firebase.auth().signInWithPopup(provider)
       .then((result) => {
-        // if(navigator.geolocation){
-        //   navigator.geolocation.getCurrentPosition(position => {
-        //     const obj = {
-        //       lat: position.coords.latitude,
-        //       lng: position.coords.longitude
-        //     }
-        //     this.setState({
-        //         userCoords: obj
-        //     })
-        //   })
-        // }
         console.log(result.user.email + 'ha iniciado sesión')
       })
-    //   this.forceUpdate();
   }
 
   handleLogout(){
@@ -135,22 +124,25 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="container-xl full-height" style={{minHeight:'57rem'}}>
-        <Router>
-          { this.renderLoginButton() }
-          <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} user={this.state.user} />
+        <div>
+            <div className="container-xl full-height" style={{minHeight:'57rem'}}>
+                <Router>
+                   { this.renderLoginButton() }
+                <NavMenu optionSelected={this.state.optionSelected} changeOption={this.changeOption} user={this.state.user} />
 
-          <Route exact path="/" render={()=>{ 
-            return  <CovidMap 
-                        user={this.state.user} 
-                        coords={this.state.coords} 
-                        handleUpload={this.handleUpload} 
-                        userCoords={this.state.userCoords} /> }} />
-          
-        </Router>
-        <div className="my-auto"></div>
-        <Footer />
-      </div>
+                <Route exact path="/" render={()=>{ 
+                    return  <CovidMap 
+                    user={this.state.user} 
+                    coords={this.state.coords} 
+                    handleUpload={this.handleUpload} 
+                    userCoords={this.state.userCoords} /> }} />
+                
+                </Router>
+                <div className="my-auto"></div>
+                <Footer />
+            </div>
+            <ChatBot />
+        </div>
     );
   }
 }

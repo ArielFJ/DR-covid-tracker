@@ -38,6 +38,12 @@ export class GraphsComponent extends Component {
         let dataset = this.state;
         if(this.props.user){
             if(dataset.dates.length > 0){
+                let datasetLast2Months = {
+                    dates: dataset.dates.slice(-60),
+                    totalCases: dataset.totalCases.slice(-60),
+                    totalDeaths: dataset.totalDeaths.slice(-60)
+                }
+
                 let datasetLast3 = {
                     dates: dataset.dates.slice(-3),
                     totalCases: dataset.totalCases.slice(-3),
@@ -52,7 +58,7 @@ export class GraphsComponent extends Component {
                 return (
                     <div className="text-center">                    
                         <h1 className="display-4">Approximate cases in last 2 months</h1>
-                        <Graph  data={dataset} />
+                        <Graph  data={datasetLast2Months} />
                         <h1 className="display-4">Approximate cases in last 3 days</h1>
                         <Graph data={datasetLast3}/>
                         <h1 className="display-4">Approximate cases in the last week</h1>

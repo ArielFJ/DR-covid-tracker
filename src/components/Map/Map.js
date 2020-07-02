@@ -110,7 +110,6 @@ export class Map extends Component {
     }
 
     componentDidUpdate() {
-        console.log(this.map.getZoom())
         if (this.props.mapProps.canAdd) {
             this.setNewMark({
                 coords: this.state.coords,
