@@ -7,10 +7,10 @@ export class CovidStats extends Component {
     }
 
     async componentDidMount(){
-        let res = await fetch('https://cors-anywhere.herokuapp.com/https://thevirustracker.com/free-api?global=stats');
-        let data = await res.json();
+        let res = await fetch('https://cors-anywhere.herokuapp.com/https://corona.lmao.ninja/v2/all?yesterday');
+        let data = await res.json();        
         this.setState({
-            info: data.results[0]
+            info: data
         })
     }
 
@@ -19,19 +19,13 @@ export class CovidStats extends Component {
             <div className="text-center">
                 <h1 className="display-4">Stats</h1>
                 <ul className="list-group">
-                {   Object.keys(this.state.info).length > 0 &&
-                    Object.keys(this.state.info).map((key,i) => {
-                        if(key !== 'source'){
-                            const words = key.split('_');
-                            const title = words.map((word, i) => {
-                                if(i === 0){
-                                    return word.charAt(0).toUpperCase() + word.slice(1) + ' ';
-                                }
-                                return word + ' ';
-                            });    
-                            return <li key={i} className="list-group-item list-group-item-info">{title.map(word => word)}: {this.state.info[key]}</li>
-                        }
-                        return '';
+                {
+                   Object.keys(this.state.info).length > 0 &&
+                    Object.keys(this.state.info).map((key,i) => {                        
+                        const words = key.split(/(?=[A-Z])/);
+                        const title = words.join(' ');    
+                        return <li key={i} className="list-group-item list-group-item-info">{title[0].toUpperCase() + title.substr(1)}: {this.state.info[key]}</li>                    
+                        //return '';
                     })
                 }
                 </ul>
